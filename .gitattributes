@@ -1,0 +1,2 @@
+# Files in bin/ are published byte-for-byte; never touch line endings.
+bin/** -text

@@ -1,0 +1,9 @@
+{
+  "critical": [
+    "settlers-united.dll",
+    "s4_artifacts/BalanceConfigs.zip",
+    "s4_artifacts/Plugin_SU.zip"
+  ],
+  "preserve": [],
+  "mirrors": []
+}

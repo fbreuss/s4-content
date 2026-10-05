@@ -1,0 +1,80 @@
+name: publish
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!gh-pages'
+      - '!wip/**'
+  delete:
+
+# One run at a time, so revision numbers stay unique.
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    if: github.event_name == 'push' || (github.event.ref_type == 'branch' && github.event.ref != 'gh-pages' && !startsWith(github.event.ref, 'wip/'))
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+      SRC_DIR: ${{ github.workspace }}/src
+      PAGES_DIR: ${{ github.workspace }}/pages
+      BRANCH: ${{ github.event_name == 'push' && github.ref_name || github.event.ref }}
+      COMMIT: ${{ github.sha }}
+    steps:
+      - name: Checkout content
+        if: github.event_name == 'push'
+        uses: actions/checkout@v4
+        with:
+          path: src
+
+      - name: Checkout tools (default branch)
+        if: github.event_name == 'delete'
+        uses: actions/checkout@v4
+        with:
+          path: src
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Checkout gh-pages
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          url="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git ls-remote --exit-code --heads "$url" gh-pages >/dev/null; then
+            git clone --depth 1 --branch gh-pages "$url" "$PAGES_DIR"
+          else
+            git init -b gh-pages "$PAGES_DIR"
+            git -C "$PAGES_DIR" remote add origin "$url"
+            touch "$PAGES_DIR/.nojekyll"
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Publish
+        if: github.event_name == 'push'
+        run: |
+          export COMMIT_MESSAGE="$(git -C "$SRC_DIR" log -1 --format=%s)"
+          node "$SRC_DIR/tools/publish.mjs" publish
+
+      - name: Remove channel
+        if: github.event_name == 'delete'
+        run: node "$SRC_DIR/tools/publish.mjs" remove
+
+      - name: Push gh-pages
+        run: |
+          cd "$PAGES_DIR"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to publish."
+          else
+            git commit -m "${BRANCH}: ${GITHUB_SHA::7}"
+            git push origin gh-pages
+          fi
