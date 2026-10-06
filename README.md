@@ -16,7 +16,7 @@ Optional local check before pushing: `node tools/publish.mjs check`
 
 ## Configuration (`packages.json`)
 
-- `critical`: files that must be identical on all machines (they make up the `criticalHash`)
+- `critical`: files that must be identical on all machines (they make up the `criticalHash`, e.g. balancing and plugin)
 - `preserve`: paths the launcher never deletes or overwrites
 - `mirrors`: additional download sources (`<base>/<sha256>`)
 
