@@ -8,7 +8,7 @@ on:
       - '!wip/**'
   delete:
 
-# One run at a time, so revision numbers stay unique.
+# One run at a time, so version numbers stay unique.
 concurrency:
   group: publish
   cancel-in-progress: false
@@ -64,7 +64,7 @@ jobs:
           export COMMIT_MESSAGE="$(git -C "$SRC_DIR" log -1 --format=%s)"
           node "$SRC_DIR/tools/publish.mjs" publish
 
-      - name: Remove channel
+      - name: Remove release
         if: github.event_name == 'delete'
         run: node "$SRC_DIR/tools/publish.mjs" remove
 

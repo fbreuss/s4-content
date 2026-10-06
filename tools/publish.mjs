@@ -1,8 +1,8 @@
-// Publishes the content of bin/ as a signed, immutable revision.
+// Publishes the content of bin/ as a signed, immutable version.
 //
 //   node tools/publish.mjs check     local dry run: validate files, print hashes (no network, no key)
-//   node tools/publish.mjs publish   (CI) upload new files, write manifest, point channel BRANCH at it
-//   node tools/publish.mjs remove    (CI) remove channel BRANCH from channels.json
+//   node tools/publish.mjs publish   (CI) upload new files, write manifest, point release BRANCH at it
+//   node tools/publish.mjs remove    (CI) remove release BRANCH from releases.json
 //
 // CI environment: SRC_DIR, PAGES_DIR, BRANCH, COMMIT, COMMIT_MESSAGE, GITHUB_REPOSITORY,
 // SIGNING_KEY (Ed25519 PKCS#8 PEM), GH_TOKEN (used by the gh CLI).
@@ -16,7 +16,7 @@ const FORMAT = 1;
 const MAX_ASSETS_PER_RELEASE = 1000;
 const MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024 - 1;
 const UPLOAD_BATCH = 20;
-const PROTECTED_CHANNEL = 'main';
+const PROTECTED_RELEASE = 'main';
 
 const SRC_DIR = process.env.SRC_DIR || path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BIN_DIR = path.join(SRC_DIR, 'bin');
@@ -132,7 +132,7 @@ function criticalHashOf(files) {
   return sha256(files.filter((f) => f.critical).map((f) => `${f.path}\0${f.sha256}\n`).join(''));
 }
 
-// Identifies the full content of a revision; identical content reuses the existing revision.
+// Identifies the full content of a version; identical content reuses the existing version.
 function contentHashOf(files, preserve) {
   return sha256(JSON.stringify({
     files: files.map((f) => [f.path, f.sha256, !!f.critical]),
@@ -161,22 +161,22 @@ function releaseExists(repo, tag) {
   }
 }
 
-// Uploads files as assets named <sha256>, split into releases rev-N, rev-N-2, ... of at most 1000 assets.
-function uploadObjects(objects, rev, index) {
+// Uploads files as assets named <sha256>, split into GitHub releases vN, vN-2, ... of at most 1000 assets.
+function uploadObjects(objects, version, index) {
   const repo = env('GITHUB_REPOSITORY');
   const commit = env('COMMIT');
   const stagingRoot = fs.mkdtempSync(path.join(process.env.RUNNER_TEMP || '/tmp', 'objects-'));
 
   for (let chunk = 0; chunk * MAX_ASSETS_PER_RELEASE < objects.length; chunk++) {
     const part = objects.slice(chunk * MAX_ASSETS_PER_RELEASE, (chunk + 1) * MAX_ASSETS_PER_RELEASE);
-    const tag = chunk === 0 ? `rev-${rev}` : `rev-${rev}-${chunk + 1}`;
+    const tag = chunk === 0 ? `v${version}` : `v${version}-${chunk + 1}`;
     const staging = path.join(stagingRoot, tag);
     fs.mkdirSync(staging);
     for (const f of part) fs.copyFileSync(f.abs, path.join(staging, f.sha256));
 
     if (!releaseExists(repo, tag)) {
       gh(['release', 'create', tag, '--repo', repo, '--target', commit, '--title', tag,
-        '--notes', `Revision ${rev} (${env('BRANCH')}, ${commit.slice(0, 7)}): ${process.env.COMMIT_MESSAGE || ''}`,
+        '--notes', `Version ${version} (${env('BRANCH')}, ${commit.slice(0, 7)}): ${process.env.COMMIT_MESSAGE || ''}`,
         '--latest=false']);
     }
     for (let i = 0; i < part.length; i += UPLOAD_BATCH) {
@@ -194,17 +194,17 @@ function uploadObjects(objects, rev, index) {
 
 function loadState(pagesDir) {
   return {
-    index: readJson(path.join(pagesDir, 'index.json'), { latestRev: 0, seq: 0, objects: {}, contentRevs: {} }),
-    channels: readJson(path.join(pagesDir, 'channels.json'), { format: FORMAT, seq: 0, channels: {}, mirrors: [] }),
+    index: readJson(path.join(pagesDir, 'index.json'), { latestVersion: 0, seq: 0, objects: {}, contentVersions: {} }),
+    releases: readJson(path.join(pagesDir, 'releases.json'), { format: FORMAT, seq: 0, releases: {}, mirrors: [] }),
   };
 }
 
-function saveChannels(pagesDir, index, channels, key) {
+function saveReleases(pagesDir, index, releases, key) {
   index.seq += 1;
-  channels.format = FORMAT;
-  channels.seq = index.seq;
-  channels.updated = new Date().toISOString();
-  writeSigned(path.join(pagesDir, 'channels.json'), channels, key);
+  releases.format = FORMAT;
+  releases.seq = index.seq;
+  releases.updated = new Date().toISOString();
+  writeSigned(path.join(pagesDir, 'releases.json'), releases, key);
 }
 
 async function publish() {
@@ -216,21 +216,21 @@ async function publish() {
   const files = await collectFiles(config);
   const contentHash = contentHashOf(files, preserve);
   const criticalHash = criticalHashOf(files);
-  const { index, channels } = loadState(pagesDir);
+  const { index, releases } = loadState(pagesDir);
 
-  let rev = index.contentRevs[contentHash];
-  if (rev) {
-    console.log(`Content identical to revision ${rev}, no upload needed.`);
+  let version = index.contentVersions[contentHash];
+  if (version) {
+    console.log(`Content identical to version ${version}, no upload needed.`);
   } else {
-    rev = index.latestRev + 1;
+    version = index.latestVersion + 1;
     const seen = new Set();
     const newObjects = files.filter((f) => !index.objects[f.sha256] && !seen.has(f.sha256) && seen.add(f.sha256));
-    console.log(`Creating revision ${rev}: ${files.length} files, ${newObjects.length} new.`);
-    uploadObjects(newObjects, rev, index);
+    console.log(`Creating version ${version}: ${files.length} files, ${newObjects.length} new.`);
+    uploadObjects(newObjects, version, index);
 
     const manifest = {
       format: FORMAT,
-      rev,
+      version,
       created: new Date().toISOString(),
       branch,
       commit: env('COMMIT'),
@@ -240,20 +240,20 @@ async function publish() {
       preserve,
       files: files.map(({ abs, ...f }) => ({ ...f, url: index.objects[f.sha256].url })),
     };
-    writeSigned(path.join(pagesDir, 'manifests', `${rev}.json`), manifest, key);
-    index.latestRev = rev;
-    index.contentRevs[contentHash] = rev;
+    writeSigned(path.join(pagesDir, 'manifests', `${version}.json`), manifest, key);
+    index.latestVersion = version;
+    index.contentVersions[contentHash] = version;
   }
 
   const mirrors = config.mirrors || [];
-  const current = channels.channels[branch];
-  if (current?.rev === rev && JSON.stringify(channels.mirrors) === JSON.stringify(mirrors)) {
-    console.log(`Channel ${branch} already points to revision ${rev}.`);
+  const current = releases.releases[branch];
+  if (current?.version === version && JSON.stringify(releases.mirrors) === JSON.stringify(mirrors)) {
+    console.log(`Release ${branch} already points to version ${version}.`);
   } else {
-    channels.channels[branch] = { rev, criticalHash };
-    channels.mirrors = mirrors;
-    saveChannels(pagesDir, index, channels, key);
-    console.log(`Channel ${branch} -> revision ${rev} (criticalHash ${criticalHash.slice(0, 12)}).`);
+    releases.releases[branch] = { version, criticalHash };
+    releases.mirrors = mirrors;
+    saveReleases(pagesDir, index, releases, key);
+    console.log(`Release ${branch} -> version ${version} (criticalHash ${criticalHash.slice(0, 12)}).`);
   }
   writeJson(path.join(pagesDir, 'index.json'), index);
 }
@@ -261,17 +261,17 @@ async function publish() {
 async function remove() {
   const pagesDir = env('PAGES_DIR');
   const branch = env('BRANCH');
-  if (branch === PROTECTED_CHANNEL) throw new Error(`Channel ${PROTECTED_CHANNEL} cannot be removed.`);
+  if (branch === PROTECTED_RELEASE) throw new Error(`Release ${PROTECTED_RELEASE} cannot be removed.`);
   const key = crypto.createPrivateKey(env('SIGNING_KEY'));
-  const { index, channels } = loadState(pagesDir);
-  if (!channels.channels[branch]) {
-    console.log(`Channel ${branch} does not exist.`);
+  const { index, releases } = loadState(pagesDir);
+  if (!releases.releases[branch]) {
+    console.log(`Release ${branch} does not exist.`);
     return;
   }
-  delete channels.channels[branch];
-  saveChannels(pagesDir, index, channels, key);
+  delete releases.releases[branch];
+  saveReleases(pagesDir, index, releases, key);
   writeJson(path.join(pagesDir, 'index.json'), index);
-  console.log(`Channel ${branch} removed.`);
+  console.log(`Release ${branch} removed.`);
 }
 
 async function check() {

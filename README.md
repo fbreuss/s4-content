@@ -1,28 +1,29 @@
 # s4-content
 
-Mod-Dateien für den Settlers-United-Launcher. `bin/` entspricht exakt dem `bin/`-Ordner des Launchers.
+Mod files for the Settlers United launcher. `bin/` mirrors the launcher's `bin/` folder exactly.
 
-## Veröffentlichen
+## Publishing
 
-Dateien in `bin/` ändern, committen, pushen. Jeder Push auf einen Branch geht automatisch live:
+Change files in `bin/`, commit, push. Every push to a branch goes live automatically:
 
-- `main` = Stable-Kanal, jeder andere Branch = eigener Kanal (z. B. `preview`)
-- Branches mit `wip/`-Präfix werden **nicht** veröffentlicht
-- Branch löschen = Kanal entfernen (`main` kann nicht entfernt werden)
-- Rollback: `git revert` + Push (gleicher Inhalt = gleiche Revision, nichts wird neu hochgeladen)
+- Every branch is an **S4 release version** (selectable in the launcher under Settings → S4 Release Version):
+  `main` = Stable, every other branch = its own release version (e.g. `preview`)
+- Branches with a `wip/` prefix are **not** published
+- Deleting a branch removes its release version (`main` cannot be removed)
+- Rollback: `git revert` + push (identical content = identical version, nothing is uploaded again)
 
-Vor dem Push lokal prüfen (optional): `node tools/publish.mjs check`
+Optional local check before pushing: `node tools/publish.mjs check`
 
-## Konfiguration (`packages.json`)
+## Configuration (`packages.json`)
 
-- `critical`: Dateien, die auf allen Rechnern identisch sein müssen (ergeben den `criticalHash`)
-- `preserve`: Pfade, die der Launcher nie löscht oder überschreibt
-- `mirrors`: zusätzliche Download-Quellen (`<basis>/<sha256>`)
+- `critical`: files that must be identical on all machines (they make up the `criticalHash`)
+- `preserve`: paths the launcher never deletes or overwrites
+- `mirrors`: additional download sources (`<base>/<sha256>`)
 
-## Veröffentlichte Daten
+## Published data
 
-- `https://fbreuss.github.io/s4-content/channels.json` (+ `.sig`): Kanal → Revision
-- `https://fbreuss.github.io/s4-content/manifests/<rev>.json` (+ `.sig`): Dateiliste jeder Revision
-- Release `rev-<N>`: Dateien, die in Revision N neu dazugekommen sind (benannt nach SHA-256)
+- `https://fbreuss.github.io/s4-content/releases.json` (+ `.sig`): release version (branch) → version
+- `https://fbreuss.github.io/s4-content/manifests/<version>.json` (+ `.sig`): file list of every version
+- GitHub release `v<N>`: file storage only – the files that were added in version N (named by SHA-256)
 
-Signiert mit Ed25519 (`SIGNING_KEY`-Secret). Neuer Schlüssel: `node tools/keygen.mjs`.
+Signed with Ed25519 (`SIGNING_KEY` secret). New key pair: `node tools/keygen.mjs`.
