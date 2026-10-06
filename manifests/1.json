@@ -1,0 +1,112 @@
+{
+  "format": 1,
+  "version": 1,
+  "created": "2026-10-06T08:23:10.163Z",
+  "branch": "main",
+  "commit": "177fde972c8398e9e75b8bb1955349f49282fc4f",
+  "message": "Update Readme",
+  "contentHash": "8ab35e8cf9a6870ec03e9a7d3dda13002a0ff21708a269d3220b8047e78dc098",
+  "criticalHash": "e3b08c4281a3adbe43ee2e02ca9564dc530a0e9b71ce5a774831bfe5b76b9920",
+  "preserve": [],
+  "files": [
+    {
+      "path": "s4_artifacts/BalanceConfigs.zip",
+      "sha256": "ba3e46fed9a49c18e634885c18388892f7645912e443231ff79e64c57ae4079a",
+      "size": 1430250,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ba3e46fed9a49c18e634885c18388892f7645912e443231ff79e64c57ae4079a"
+    },
+    {
+      "path": "s4_artifacts/Edition_HE.zip",
+      "sha256": "38602656b2c2591ad53d5d66a72f9f198419d412150fbb94842dd284ab1e7a1f",
+      "size": 31314212,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/38602656b2c2591ad53d5d66a72f9f198419d412150fbb94842dd284ab1e7a1f"
+    },
+    {
+      "path": "s4_artifacts/Editor_Plus.zip",
+      "sha256": "ad0e7f92c04fb50292b150c5d0ae6e3e4dd6d3cf2ab7423349a0345dea7e6689",
+      "size": 181340,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ad0e7f92c04fb50292b150c5d0ae6e3e4dd6d3cf2ab7423349a0345dea7e6689"
+    },
+    {
+      "path": "s4_artifacts/Editor_withFix.zip",
+      "sha256": "ad5cac2f52f420f0db3855bd6495f7566d095b7f2f91f041a5b697e53d703e6c",
+      "size": 593639,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ad5cac2f52f420f0db3855bd6495f7566d095b7f2f91f041a5b697e53d703e6c"
+    },
+    {
+      "path": "s4_artifacts/Editor_withoutFix.zip",
+      "sha256": "83b60043f3fb28876f16356e830ab19959f21cc779fbe3ba812918f2deba07e3",
+      "size": 607809,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/83b60043f3fb28876f16356e830ab19959f21cc779fbe3ba812918f2deba07e3"
+    },
+    {
+      "path": "s4_artifacts/Maps_MissionOverhaul.zip",
+      "sha256": "54e2c260be1222cbd1f8c7b91801f75f6c55e7e00968d39e8c551e163284ce58",
+      "size": 1520144,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/54e2c260be1222cbd1f8c7b91801f75f6c55e7e00968d39e8c551e163284ce58"
+    },
+    {
+      "path": "s4_artifacts/Maps_Originals.zip",
+      "sha256": "493caa7639c7ae85a46286d3db8cc4abc4e1a769e3989e94bbfcd8b3827663b1",
+      "size": 1529179,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/493caa7639c7ae85a46286d3db8cc4abc4e1a769e3989e94bbfcd8b3827663b1"
+    },
+    {
+      "path": "s4_artifacts/Music_NoBing.zip",
+      "sha256": "0a72e00a3e1c58368b54d435f571ea97fee6135df9884cd5dcdf8397b07572dc",
+      "size": 9034378,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/0a72e00a3e1c58368b54d435f571ea97fee6135df9884cd5dcdf8397b07572dc"
+    },
+    {
+      "path": "s4_artifacts/Music_S3_false.zip",
+      "sha256": "9c21bb4a46703825f7df24855ef8d55f36f1f614f50b225e605c8c5279b40dc8",
+      "size": 1082,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/9c21bb4a46703825f7df24855ef8d55f36f1f614f50b225e605c8c5279b40dc8"
+    },
+    {
+      "path": "s4_artifacts/Music_S3_true.zip",
+      "sha256": "f970562749f01ed6f4a9a3043d9ecad1d04b6060997a3fb30806fd24e47cbbff",
+      "size": 1234,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/f970562749f01ed6f4a9a3043d9ecad1d04b6060997a3fb30806fd24e47cbbff"
+    },
+    {
+      "path": "s4_artifacts/Plugin_HDPatch_Remove.zip",
+      "sha256": "5c75c79f89591b95b9226c3785d4e251ed21172e10f637d211f5b595ad11a2e6",
+      "size": 187,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/5c75c79f89591b95b9226c3785d4e251ed21172e10f637d211f5b595ad11a2e6"
+    },
+    {
+      "path": "s4_artifacts/Plugin_SU.zip",
+      "sha256": "acb6cc87fdd3708b4250061190860f5fbc16a402c0313f6dac82f800339ee491",
+      "size": 1215028,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/acb6cc87fdd3708b4250061190860f5fbc16a402c0313f6dac82f800339ee491"
+    },
+    {
+      "path": "s4_artifacts/Plugin_Zoom.zip",
+      "sha256": "7c6bf5d4a605d10f8c212998c51fbbfd75e4c299bfec5a266a4b98f7de158933",
+      "size": 115205,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/7c6bf5d4a605d10f8c212998c51fbbfd75e4c299bfec5a266a4b98f7de158933"
+    },
+    {
+      "path": "s4_artifacts/Textures_NewWorld.zip",
+      "sha256": "2a45e095a64e32c794a25da0f8f75314a5baa83afa34200e65db435c31091849",
+      "size": 17144954,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/2a45e095a64e32c794a25da0f8f75314a5baa83afa34200e65db435c31091849"
+    },
+    {
+      "path": "s4_artifacts/Textures_OldWorld.zip",
+      "sha256": "2fe6c88d22e2a8819afe73ea347f5350613ffba6119babdbb3f2d0588751d997",
+      "size": 14954065,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/2fe6c88d22e2a8819afe73ea347f5350613ffba6119babdbb3f2d0588751d997"
+    },
+    {
+      "path": "settlers-united.dll",
+      "sha256": "6189a094a68e4e30210f05638affcff102c42f2c9ac9a70209474074e9deae38",
+      "size": 6938624,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/6189a094a68e4e30210f05638affcff102c42f2c9ac9a70209474074e9deae38"
+    }
+  ]
+}
