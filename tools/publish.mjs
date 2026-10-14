@@ -333,7 +333,7 @@ function renderChangelogHtml(data) {
   :root { color-scheme: light dark; --fg:#1d1d1f; --bg:#fff; --muted:#6e6e73; --line:#d2d2d7; --accent:#3b6fd4; }
   @media (prefers-color-scheme: dark) { :root { --fg:#f2f2f2; --bg:#16181d; --muted:#9a9aa3; --line:#33363d; --accent:#7ea6ee; } }
   body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui, sans-serif; }
-  main { max-width:820px; margin:0 auto; padding:24px 16px 64px; }
+  main { max-width:960px; margin:0 auto; padding:24px 16px 64px; }
   h1 { font-size:22px; margin:0 0 16px; }
   .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:16px; }
   .tabs { display:flex; flex-wrap:wrap; gap:6px; }
@@ -345,12 +345,13 @@ function renderChangelogHtml(data) {
   input { flex:1; min-width:160px; }
   article { border-top:1px solid var(--line); padding:14px 0; }
   article.hl { background:color-mix(in srgb, var(--accent) 12%, transparent); }
-  h2 { font-size:17px; margin:0; }
+  h2 { font-size:21px; margin:0; }
+  h4 { font-size:18px; font-weight:700; line-height:1.3; margin:16px 0 4px; }
   h2 a { color:inherit; text-decoration:none; }
   .meta { color:var(--muted); font-size:13px; margin:2px 0 6px; }
-  .tag { display:inline-block; border:1px solid currentColor; border-radius:4px; padding:0 7px; font-size:12px; font-weight:600; margin-right:6px; }
+  .tag { display:inline-block; border:1px solid currentColor; border-radius:4px; padding:1px 10px; font-size:14px; font-weight:700; letter-spacing:.02em; margin-right:8px; vertical-align:middle; }
   .tag.on { color:#fff !important; }
-  .badge { border:1px solid var(--accent); color:var(--accent); border-radius:10px; padding:0 7px; font-size:12px; margin-left:6px; }
+  .badge { border:1px solid var(--accent); color:var(--accent); border-radius:10px; padding:1px 10px; font-size:13px; margin-left:6px; vertical-align:middle; }
   p { margin:6px 0; } ul { margin:6px 0; padding-left:22px; } code { background:color-mix(in srgb, var(--muted) 20%, transparent); padding:0 4px; border-radius:3px; }
   .empty { color:var(--muted); padding:24px 0; }
 </style>
