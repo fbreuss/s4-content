@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settlers United S4 content changelog</title>
+<style>
+  :root { color-scheme: light dark; --fg:#1d1d1f; --bg:#fff; --muted:#6e6e73; --line:#d2d2d7; --accent:#3b6fd4; }
+  @media (prefers-color-scheme: dark) { :root { --fg:#f2f2f2; --bg:#16181d; --muted:#9a9aa3; --line:#33363d; --accent:#7ea6ee; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui, sans-serif; }
+  main { max-width:820px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { font-size:22px; margin:0 0 16px; }
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:16px; }
+  .tabs { display:flex; flex-wrap:wrap; gap:6px; }
+  button, input, select { font:inherit; color:inherit; background:transparent; border:1px solid var(--line); border-radius:6px; padding:5px 10px; }
+  button { cursor:pointer; }
+  button[aria-selected="true"] { border-color:var(--accent); color:var(--accent); }
+  input { flex:1; min-width:160px; }
+  article { border-top:1px solid var(--line); padding:14px 0; }
+  article.hl { background:color-mix(in srgb, var(--accent) 12%, transparent); }
+  h2 { font-size:17px; margin:0; }
+  h2 a { color:inherit; text-decoration:none; }
+  .meta { color:var(--muted); font-size:13px; margin:2px 0 6px; }
+  .badge { border:1px solid var(--accent); color:var(--accent); border-radius:10px; padding:0 7px; font-size:12px; margin-left:6px; }
+  p { margin:6px 0; } ul { margin:6px 0; padding-left:22px; } code { background:color-mix(in srgb, var(--muted) 20%, transparent); padding:0 4px; border-radius:3px; }
+  .empty { color:var(--muted); padding:24px 0; }
+</style>
+</head>
+<body>
+<main>
+<h1>S4 content changelog</h1>
+<div class="bar">
+  <div class="tabs" id="tabs" role="tablist"></div>
+  <input id="q" type="search" placeholder="Search version or text" aria-label="Search">
+  <select id="lang" aria-label="Language"><option value="en">English</option><option value="de">Deutsch</option></select>
+</div>
+<div id="list"></div>
+</main>
+<script type="application/json" id="data">{"format":1,"versions":{"1":{"created":"2026-10-06T08:23:10.163Z","branch":"main","commit":"177fde9","message":"Update Readme","text":{"default":"# A new era for Settlers 4 updates\n\nThe Settlers United mod files for Settlers IV now have a home of their own: balancing, plugin and everything that goes with it reach you **independently of the launcher** – no launcher update, no reinstall.\n\n# What changes for you\n\n- **Faster updates:** New balancing changes and plugin versions are there at your next start.\n- **Stable or Preview:** Select the version you like in \"Create new game\" and in the Launcher-settings (Settlers IV, Tools) and choose between 'stable' or 'preview' to test upcoming changes before everyone else.\n- **Secure:** All files are signed and verified before installation.\n- **Replays:** This update was needed as starting point to support Replays. When joining a game or playing a replay, the launcher automatically loads exactly the version it was played with – replays stay playable after future updates. This ist yet **work in progress** as a **debugging feature** for now. A nice user interface to load Replays will follow soon.\n\nThis is the starting shot. It's going to get exciting. 🚀"}}},"releases":{"main":{"current":1,"versions":[{"version":1,"at":"2026-10-06T08:23:10.163Z"}]}},"seq":1,"updated":"2026-10-14T09:21:54.988Z"}</script>
+<script>
+(function () {
+  var data = JSON.parse(document.getElementById('data').textContent);
+  var tabsEl = document.getElementById('tabs'), listEl = document.getElementById('list');
+  var qEl = document.getElementById('q'), langEl = document.getElementById('lang');
+  var names = Object.keys(data.releases).sort(function (a, b) { return a === 'main' ? -1 : b === 'main' ? 1 : a.localeCompare(b); });
+  var label = function (n) { return n === 'main' ? 'Stable' : n; };
+  var params = new URLSearchParams(location.search);
+  var tab = params.get('release') || (names.indexOf('main') >= 0 ? 'main' : names[0]) || 'all';
+  langEl.value = params.get('lang') || ((navigator.language || 'en').slice(0, 2) === 'de' ? 'de' : 'en');
+  qEl.value = params.get('q') || '';
+  var focus = (location.hash.match(/^#v(\d+)$/) || [])[1];
+
+  function fmt(iso) { var d = new Date(iso); return isNaN(d) ? '' : d.toLocaleDateString(langEl.value === 'de' ? 'de-DE' : 'en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' }); }
+  function textOf(v) { var t = (data.versions[v] || {}).text || {}; return t[langEl.value] || t.default || t.en || t.de || ''; }
+  function inline(parent, s) {
+    s.split(/(\*\*[^*]+\*\*|`[^`]+`)/).forEach(function (part) {
+      if (!part) return;
+      var el = null;
+      if (part.slice(0, 2) === '**' && part.slice(-2) === '**' && part.length > 4) { el = document.createElement('strong'); el.textContent = part.slice(2, -2); }
+      else if (part[0] === '`' && part.slice(-1) === '`' && part.length > 2) { el = document.createElement('code'); el.textContent = part.slice(1, -1); }
+      parent.appendChild(el || document.createTextNode(part));
+    });
+  }
+  function markdown(parent, md) {
+    var ul = null, p = null;
+    md.split('\n').forEach(function (line) {
+      var item = /^\s*[-*]\s+(.*)$/.exec(line);
+      var head = /^#+\s+(.*)$/.exec(line);
+      if (head) { ul = null; p = null; var h = document.createElement('h4'); inline(h, head[1]); parent.appendChild(h); return; }
+      if (item) { p = null; if (!ul) { ul = document.createElement('ul'); parent.appendChild(ul); } var li = document.createElement('li'); inline(li, item[1]); ul.appendChild(li); }
+      else if (!line.trim()) { ul = null; p = null; }
+      else { ul = null; if (!p) { p = document.createElement('p'); parent.appendChild(p); } else p.appendChild(document.createElement('br')); inline(p, line.replace(/^#+\s*/, '')); }
+    });
+  }
+  function rows() {
+    if (tab === 'all') return Object.keys(data.versions).map(Number).sort(function (a, b) { return b - a; }).map(function (v) { return { version: v, at: data.versions[v].created }; });
+    return ((data.releases[tab] || {}).versions || []);
+  }
+  function releasesOf(v) {
+    return names.map(function (n) { var e = (data.releases[n].versions || []).filter(function (x) { return x.version === v; })[0]; return e ? { name: n, at: e.at } : null; })
+      .filter(Boolean).sort(function (a, b) { return a.at.localeCompare(b.at); });
+  }
+  function render() {
+    tabsEl.textContent = '';
+    names.concat(['all']).forEach(function (n) {
+      var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', String(n === tab));
+      b.textContent = n === 'all' ? 'All versions' : label(n);
+      b.onclick = function () { tab = n; render(); }; tabsEl.appendChild(b);
+    });
+    var q = qEl.value.trim().toLowerCase().replace(/^v/, '');
+    listEl.textContent = '';
+    var shown = 0;
+    rows().forEach(function (r) {
+      var v = data.versions[r.version] || {}, text = textOf(r.version);
+      var haystack = (r.version + ' ' + (v.message || '') + ' ' + text).toLowerCase();
+      if (q && haystack.indexOf(q) < 0) return;
+      shown++;
+      var art = document.createElement('article'); art.id = 'v' + r.version; if (String(r.version) === focus) art.className = 'hl';
+      var h = document.createElement('h2'), a = document.createElement('a'); a.href = '#v' + r.version; a.textContent = 'Version ' + r.version; h.appendChild(a);
+      if (tab !== 'all' && data.releases[tab].current === r.version) { var cur = document.createElement('span'); cur.className = 'badge'; cur.textContent = 'current'; h.appendChild(cur); }
+      var meta = document.createElement('div'); meta.className = 'meta';
+      var parts = releasesOf(r.version).map(function (x) { return label(x.name) + ' ' + fmt(x.at); });
+      meta.textContent = parts.length ? parts.join(' \u2192 ') : 'not released (built ' + fmt(v.created) + ')';
+      art.appendChild(h); art.appendChild(meta);
+      if (text) markdown(art, text); else if (v.message) { var m = document.createElement('p'); m.textContent = v.message; art.appendChild(m); }
+      listEl.appendChild(art);
+    });
+    if (!shown) { var e = document.createElement('div'); e.className = 'empty'; e.textContent = 'No matching versions.'; listEl.appendChild(e); }
+    if (focus) { var t = document.getElementById('v' + focus); if (t) t.scrollIntoView(); focus = null; }
+  }
+  if (focus) { var home = names.filter(function (n) { return releasesOf(Number(focus)).some(function (x) { return x.name === n; }); })[0]; if (home && !params.get('release')) tab = home; else if (!home) tab = 'all'; }
+  qEl.oninput = render; langEl.onchange = render; window.onhashchange = function () { focus = (location.hash.match(/^#v(\d+)$/) || [])[1]; render(); };
+  render();
+})();
+</script>
+</body>
+</html>

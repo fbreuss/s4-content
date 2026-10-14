@@ -1,12 +1,13 @@
 {
   "format": 1,
-  "seq": 1,
+  "seq": 2,
   "releases": {
     "main": {
       "version": 1,
-      "criticalHash": "e3b08c4281a3adbe43ee2e02ca9564dc530a0e9b71ce5a774831bfe5b76b9920"
+      "criticalHash": "e3b08c4281a3adbe43ee2e02ca9564dc530a0e9b71ce5a774831bfe5b76b9920",
+      "releasedAt": "2026-10-06T08:23:10.163Z"
     }
   },
   "mirrors": [],
-  "updated": "2026-10-06T08:23:10.164Z"
+  "updated": "2026-10-14T09:21:54.986Z"
 }

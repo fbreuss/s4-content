@@ -1,6 +1,6 @@
 {
   "latestVersion": 1,
-  "seq": 1,
+  "seq": 2,
   "objects": {
     "ba3e46fed9a49c18e634885c18388892f7645912e443231ff79e64c57ae4079a": {
       "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ba3e46fed9a49c18e634885c18388892f7645912e443231ff79e64c57ae4079a",
@@ -69,5 +69,15 @@
   },
   "contentVersions": {
     "8ab35e8cf9a6870ec03e9a7d3dda13002a0ff21708a269d3220b8047e78dc098": 1
-  }
+  },
+  "releaseHistory": {
+    "main": [
+      {
+        "version": 1,
+        "at": "2026-10-06T08:23:10.163Z"
+      }
+    ]
+  },
+  "changelogSeq": 1,
+  "changelogHash": "4c02d0837c7bc0c19d18b7b6e3292129c7595e16ee5843e732258a1e9a1862e6"
 }
