@@ -3,9 +3,11 @@
 //   node tools/publish.mjs check     local dry run: validate files, print hashes (no network, no key)
 //   node tools/publish.mjs publish   (CI) upload new files, write manifest, point release BRANCH at it
 //   node tools/publish.mjs remove    (CI) remove release BRANCH from releases.json
+//   node tools/publish.mjs changelog (CI/optional) only regenerate changelog.json / changelog.html
 //
 // CI environment: SRC_DIR, PAGES_DIR, BRANCH, COMMIT, COMMIT_MESSAGE, GITHUB_REPOSITORY,
-// SIGNING_KEY (Ed25519 PKCS#8 PEM), GH_TOKEN (used by the gh CLI).
+// SIGNING_KEY (Ed25519 PKCS#8 PEM), GH_TOKEN (used by the gh CLI),
+// CHANGELOG_DIR (texts of the changelog, always read from the default branch).
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -20,6 +22,12 @@ const PROTECTED_RELEASE = 'main';
 
 const SRC_DIR = process.env.SRC_DIR || path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BIN_DIR = path.join(SRC_DIR, 'bin');
+const CHANGELOG_DIR = process.env.CHANGELOG_DIR || path.join(SRC_DIR, 'changelog');
+const CHANGELOG_FORMAT = 1;
+// changelog/<version>.md = text for every language, <version>.de.md / <version>.en.md = per language
+const CHANGELOG_FILE = /^(\d+|next)(?:\.(de|en))?\.md$/;
+// changelog/next*.md inside the pushed branch: text for the version this push creates (stored in its manifest)
+const NEXT_NOTES_DIR = path.join(SRC_DIR, 'changelog');
 
 function env(name) {
   const value = process.env[name];
@@ -192,6 +200,248 @@ function uploadObjects(objects, version, index) {
   }
 }
 
+// ---------------------------------------------------------------------------------------------
+// Changelog: one text per version (changelog/<version>.md on the default branch), independent of
+// the branches. Changing a text never creates a new version; only changelog.json is republished.
+// ---------------------------------------------------------------------------------------------
+
+function readChangelogTexts() {
+  const texts = {};
+  const problems = [];
+  if (!fs.existsSync(CHANGELOG_DIR)) return { texts, problems };
+  for (const name of fs.readdirSync(CHANGELOG_DIR).sort()) {
+    if (!name.toLowerCase().endsWith('.md') || name.startsWith('_') || name.toLowerCase() === 'readme.md') continue;
+    const match = CHANGELOG_FILE.exec(name);
+    if (!match) {
+      problems.push(`${name}: file name must be <version>.md, <version>.de.md or <version>.en.md (or next*.md)`);
+      continue;
+    }
+    const text = fs.readFileSync(path.join(CHANGELOG_DIR, name), 'utf8').replace(/\r\n/g, '\n').trim();
+    if (!text) {
+      problems.push(`${name}: is empty`);
+      continue;
+    }
+    if (match[1] === 'next') continue; // pending text of a branch, handled by publish
+    const version = Number(match[1]);
+    texts[version] = { ...texts[version], [match[2] || 'default']: text };
+  }
+  return { texts, problems };
+}
+
+// Text the pushed branch brings along for the version it creates (changelog/next.md, next.de.md, next.en.md).
+function readNextNotes() {
+  const notes = {};
+  if (!fs.existsSync(NEXT_NOTES_DIR)) return undefined;
+  for (const name of fs.readdirSync(NEXT_NOTES_DIR).sort()) {
+    const match = CHANGELOG_FILE.exec(name);
+    if (!match || match[1] !== 'next') continue;
+    const text = fs.readFileSync(path.join(NEXT_NOTES_DIR, name), 'utf8').replace(/\r\n/g, '\n').trim();
+    if (text) notes[match[2] || 'default'] = text;
+  }
+  return Object.keys(notes).length ? notes : undefined;
+}
+
+function readManifests(pagesDir) {
+  const dir = path.join(pagesDir, 'manifests');
+  const result = {};
+  if (!fs.existsSync(dir)) return result;
+  for (const name of fs.readdirSync(dir)) {
+    const match = /^(\d+)\.json$/.exec(name);
+    if (!match) continue;
+    const m = readJson(path.join(dir, name), {});
+    result[Number(match[1])] = { created: m.created, branch: m.branch, commit: m.commit, message: m.message, notes: m.notes };
+  }
+  return result;
+}
+
+// Makes sure every release has a history and a releasedAt date (older releases.json files have none).
+// Returns true if releases.json has to be rewritten.
+function seedReleaseHistory(index, releases, manifests) {
+  let changed = false;
+  index.releaseHistory = index.releaseHistory || {};
+  for (const [name, entry] of Object.entries(releases.releases)) {
+    const history = (index.releaseHistory[name] = index.releaseHistory[name] || []);
+    const at = entry.releasedAt || manifests[entry.version]?.created || new Date().toISOString();
+    if (!history.length || history[history.length - 1].version !== entry.version) {
+      history.push({ version: entry.version, at });
+    }
+    if (!entry.releasedAt) {
+      entry.releasedAt = at;
+      changed = true;
+    }
+  }
+  return changed;
+}
+
+function buildChangelog(index, releases, manifests, texts) {
+  const versions = {};
+  for (const [version, m] of Object.entries(manifests)) {
+    versions[version] = {
+      created: m.created,
+      branch: m.branch,
+      commit: m.commit ? String(m.commit).slice(0, 7) : undefined,
+      message: m.message || '',
+      ...(texts[version] || m.notes ? { text: { ...m.notes, ...texts[version] } } : {}),
+    };
+  }
+  const out = {};
+  for (const [name, entry] of Object.entries(releases.releases)) {
+    // One entry per version (its latest move to this release), newest first.
+    const latest = new Map();
+    for (const h of index.releaseHistory?.[name] || []) latest.set(h.version, h.at);
+    const list = [...latest].map(([version, at]) => ({ version, at }));
+    list.sort((a, b) => b.at.localeCompare(a.at) || b.version - a.version);
+    out[name] = { current: entry.version, versions: list };
+  }
+  return { format: CHANGELOG_FORMAT, versions, releases: out };
+}
+
+// Rewrites changelog.json (+ .sig) and changelog.html if anything changed. Returns true if it did.
+function writeChangelog(pagesDir, index, releases, key) {
+  const manifests = readManifests(pagesDir);
+  const { texts, problems } = readChangelogTexts();
+  for (const problem of problems) console.warn(`changelog: ${problem}`);
+  for (const version of Object.keys(texts)) {
+    if (!manifests[version]) console.warn(`changelog: ${version}.md belongs to a version that does not exist (yet), it is shown once the version is published`);
+  }
+  const data = buildChangelog(index, releases, manifests, texts);
+  const fingerprint = sha256(JSON.stringify(data));
+  const file = path.join(pagesDir, 'changelog.json');
+  if (index.changelogHash === fingerprint && fs.existsSync(file) && fs.existsSync(path.join(pagesDir, 'changelog.html'))) {
+    return false;
+  }
+  index.changelogSeq = (index.changelogSeq || 0) + 1;
+  index.changelogHash = fingerprint;
+  const signed = { ...data, seq: index.changelogSeq, updated: new Date().toISOString() };
+  writeSigned(file, signed, key);
+  fs.writeFileSync(path.join(pagesDir, 'changelog.html'), renderChangelogHtml(signed));
+  console.log(`Changelog updated (seq ${index.changelogSeq}, ${Object.keys(data.versions).length} versions).`);
+  return true;
+}
+
+// Self-contained page: tabs per release, search, #v<version> links. All text is inserted as text nodes.
+function renderChangelogHtml(data) {
+  const json = JSON.stringify(data).replace(/</g, '\\u003c');
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settlers United S4 content changelog</title>
+<style>
+  :root { color-scheme: light dark; --fg:#1d1d1f; --bg:#fff; --muted:#6e6e73; --line:#d2d2d7; --accent:#3b6fd4; }
+  @media (prefers-color-scheme: dark) { :root { --fg:#f2f2f2; --bg:#16181d; --muted:#9a9aa3; --line:#33363d; --accent:#7ea6ee; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui, sans-serif; }
+  main { max-width:820px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { font-size:22px; margin:0 0 16px; }
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:16px; }
+  .tabs { display:flex; flex-wrap:wrap; gap:6px; }
+  button, input, select { font:inherit; color:inherit; background:transparent; border:1px solid var(--line); border-radius:6px; padding:5px 10px; }
+  button { cursor:pointer; }
+  button[aria-selected="true"] { border-color:var(--accent); color:var(--accent); }
+  input { flex:1; min-width:160px; }
+  article { border-top:1px solid var(--line); padding:14px 0; }
+  article.hl { background:color-mix(in srgb, var(--accent) 12%, transparent); }
+  h2 { font-size:17px; margin:0; }
+  h2 a { color:inherit; text-decoration:none; }
+  .meta { color:var(--muted); font-size:13px; margin:2px 0 6px; }
+  .badge { border:1px solid var(--accent); color:var(--accent); border-radius:10px; padding:0 7px; font-size:12px; margin-left:6px; }
+  p { margin:6px 0; } ul { margin:6px 0; padding-left:22px; } code { background:color-mix(in srgb, var(--muted) 20%, transparent); padding:0 4px; border-radius:3px; }
+  .empty { color:var(--muted); padding:24px 0; }
+</style>
+</head>
+<body>
+<main>
+<h1>S4 content changelog</h1>
+<div class="bar">
+  <div class="tabs" id="tabs" role="tablist"></div>
+  <input id="q" type="search" placeholder="Search version or text" aria-label="Search">
+  <select id="lang" aria-label="Language"><option value="en">English</option><option value="de">Deutsch</option></select>
+</div>
+<div id="list"></div>
+</main>
+<script type="application/json" id="data">${json}</script>
+<script>
+(function () {
+  var data = JSON.parse(document.getElementById('data').textContent);
+  var tabsEl = document.getElementById('tabs'), listEl = document.getElementById('list');
+  var qEl = document.getElementById('q'), langEl = document.getElementById('lang');
+  var names = Object.keys(data.releases).sort(function (a, b) { return a === 'main' ? -1 : b === 'main' ? 1 : a.localeCompare(b); });
+  var label = function (n) { return n === 'main' ? 'Stable' : n; };
+  var params = new URLSearchParams(location.search);
+  var tab = params.get('release') || (names.indexOf('main') >= 0 ? 'main' : names[0]) || 'all';
+  langEl.value = params.get('lang') || ((navigator.language || 'en').slice(0, 2) === 'de' ? 'de' : 'en');
+  qEl.value = params.get('q') || '';
+  var focus = (location.hash.match(/^#v(\\d+)$/) || [])[1];
+
+  function fmt(iso) { var d = new Date(iso); return isNaN(d) ? '' : d.toLocaleDateString(langEl.value === 'de' ? 'de-DE' : 'en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' }); }
+  function textOf(v) { var t = (data.versions[v] || {}).text || {}; return t[langEl.value] || t.default || t.en || t.de || ''; }
+  function inline(parent, s) {
+    s.split(/(\\*\\*[^*]+\\*\\*|\`[^\`]+\`)/).forEach(function (part) {
+      if (!part) return;
+      var el = null;
+      if (part.slice(0, 2) === '**' && part.slice(-2) === '**' && part.length > 4) { el = document.createElement('strong'); el.textContent = part.slice(2, -2); }
+      else if (part[0] === '\`' && part.slice(-1) === '\`' && part.length > 2) { el = document.createElement('code'); el.textContent = part.slice(1, -1); }
+      parent.appendChild(el || document.createTextNode(part));
+    });
+  }
+  function markdown(parent, md) {
+    var ul = null, p = null;
+    md.split('\\n').forEach(function (line) {
+      var item = /^\\s*[-*]\\s+(.*)$/.exec(line);
+      var head = /^#+\\s+(.*)$/.exec(line);
+      if (head) { ul = null; p = null; var h = document.createElement('h4'); inline(h, head[1]); parent.appendChild(h); return; }
+      if (item) { p = null; if (!ul) { ul = document.createElement('ul'); parent.appendChild(ul); } var li = document.createElement('li'); inline(li, item[1]); ul.appendChild(li); }
+      else if (!line.trim()) { ul = null; p = null; }
+      else { ul = null; if (!p) { p = document.createElement('p'); parent.appendChild(p); } else p.appendChild(document.createElement('br')); inline(p, line.replace(/^#+\\s*/, '')); }
+    });
+  }
+  function rows() {
+    if (tab === 'all') return Object.keys(data.versions).map(Number).sort(function (a, b) { return b - a; }).map(function (v) { return { version: v, at: data.versions[v].created }; });
+    return ((data.releases[tab] || {}).versions || []);
+  }
+  function releasesOf(v) {
+    return names.map(function (n) { var e = (data.releases[n].versions || []).filter(function (x) { return x.version === v; })[0]; return e ? { name: n, at: e.at } : null; })
+      .filter(Boolean).sort(function (a, b) { return a.at.localeCompare(b.at); });
+  }
+  function render() {
+    tabsEl.textContent = '';
+    names.concat(['all']).forEach(function (n) {
+      var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', String(n === tab));
+      b.textContent = n === 'all' ? 'All versions' : label(n);
+      b.onclick = function () { tab = n; render(); }; tabsEl.appendChild(b);
+    });
+    var q = qEl.value.trim().toLowerCase().replace(/^v/, '');
+    listEl.textContent = '';
+    var shown = 0;
+    rows().forEach(function (r) {
+      var v = data.versions[r.version] || {}, text = textOf(r.version);
+      var haystack = (r.version + ' ' + (v.message || '') + ' ' + text).toLowerCase();
+      if (q && haystack.indexOf(q) < 0) return;
+      shown++;
+      var art = document.createElement('article'); art.id = 'v' + r.version; if (String(r.version) === focus) art.className = 'hl';
+      var h = document.createElement('h2'), a = document.createElement('a'); a.href = '#v' + r.version; a.textContent = 'Version ' + r.version; h.appendChild(a);
+      if (tab !== 'all' && data.releases[tab].current === r.version) { var cur = document.createElement('span'); cur.className = 'badge'; cur.textContent = 'current'; h.appendChild(cur); }
+      var meta = document.createElement('div'); meta.className = 'meta';
+      var parts = releasesOf(r.version).map(function (x) { return label(x.name) + ' ' + fmt(x.at); });
+      meta.textContent = parts.length ? parts.join(' \\u2192 ') : 'not released (built ' + fmt(v.created) + ')';
+      art.appendChild(h); art.appendChild(meta);
+      if (text) markdown(art, text); else if (v.message) { var m = document.createElement('p'); m.textContent = v.message; art.appendChild(m); }
+      listEl.appendChild(art);
+    });
+    if (!shown) { var e = document.createElement('div'); e.className = 'empty'; e.textContent = 'No matching versions.'; listEl.appendChild(e); }
+    if (focus) { var t = document.getElementById('v' + focus); if (t) t.scrollIntoView(); focus = null; }
+  }
+  if (focus) { var home = names.filter(function (n) { return releasesOf(Number(focus)).some(function (x) { return x.name === n; }); })[0]; if (home && !params.get('release')) tab = home; else if (!home) tab = 'all'; }
+  qEl.oninput = render; langEl.onchange = render; window.onhashchange = function () { focus = (location.hash.match(/^#v(\\d+)$/) || [])[1]; render(); };
+  render();
+})();
+</script>
+</body>
+</html>
+`;
+}
+
 function loadState(pagesDir) {
   return {
     index: readJson(path.join(pagesDir, 'index.json'), { latestVersion: 0, seq: 0, objects: {}, contentVersions: {} }),
@@ -228,6 +478,12 @@ async function publish() {
     console.log(`Creating version ${version}: ${files.length} files, ${newObjects.length} new.`);
     uploadObjects(newObjects, version, index);
 
+    // A next.md that was already used by an earlier version is stale (it stayed in the branch): ignore it.
+    let notes = readNextNotes();
+    if (notes && Object.values(readManifests(pagesDir)).some((m) => JSON.stringify(m.notes) === JSON.stringify(notes))) {
+      console.log('changelog/next*.md was already used by an earlier version, ignored.');
+      notes = undefined;
+    }
     const manifest = {
       format: FORMAT,
       version,
@@ -238,6 +494,7 @@ async function publish() {
       contentHash,
       criticalHash,
       preserve,
+      ...(notes ? { notes } : {}),
       files: files.map(({ abs, ...f }) => ({ ...f, url: index.objects[f.sha256].url })),
     };
     writeSigned(path.join(pagesDir, 'manifests', `${version}.json`), manifest, key);
@@ -246,15 +503,25 @@ async function publish() {
   }
 
   const mirrors = config.mirrors || [];
+  const manifests = readManifests(pagesDir);
+  const backfilled = seedReleaseHistory(index, releases, manifests);
   const current = releases.releases[branch];
-  if (current?.version === version && JSON.stringify(releases.mirrors) === JSON.stringify(mirrors)) {
-    console.log(`Release ${branch} already points to version ${version}.`);
-  } else {
-    releases.releases[branch] = { version, criticalHash };
+  const pointerMoves = current?.version !== version;
+  const mirrorsChanged = JSON.stringify(releases.mirrors) !== JSON.stringify(mirrors);
+  if (pointerMoves) {
+    // A version keeps its number and its changelog when it moves between releases (e.g. preview -> stable).
+    const releasedAt = new Date().toISOString();
+    releases.releases[branch] = { version, criticalHash, releasedAt };
+    (index.releaseHistory[branch] = index.releaseHistory[branch] || []).push({ version, at: releasedAt });
+  }
+  if (pointerMoves || mirrorsChanged || backfilled) {
     releases.mirrors = mirrors;
     saveReleases(pagesDir, index, releases, key);
     console.log(`Release ${branch} -> version ${version} (criticalHash ${criticalHash.slice(0, 12)}).`);
+  } else {
+    console.log(`Release ${branch} already points to version ${version}.`);
   }
+  writeChangelog(pagesDir, index, releases, key);
   writeJson(path.join(pagesDir, 'index.json'), index);
 }
 
@@ -270,8 +537,20 @@ async function remove() {
   }
   delete releases.releases[branch];
   saveReleases(pagesDir, index, releases, key);
+  writeChangelog(pagesDir, index, releases, key);
   writeJson(path.join(pagesDir, 'index.json'), index);
   console.log(`Release ${branch} removed.`);
+}
+
+// Regenerates changelog.json / changelog.html from the current state without touching any release.
+async function changelog() {
+  const pagesDir = env('PAGES_DIR');
+  const key = crypto.createPrivateKey(env('SIGNING_KEY'));
+  const { index, releases } = loadState(pagesDir);
+  const backfilled = seedReleaseHistory(index, releases, readManifests(pagesDir));
+  if (backfilled) saveReleases(pagesDir, index, releases, key);
+  writeChangelog(pagesDir, index, releases, key);
+  writeJson(path.join(pagesDir, 'index.json'), index);
 }
 
 async function check() {
@@ -283,12 +562,16 @@ async function check() {
   console.log(`\n${files.length} files OK (* = critical)`);
   console.log(`criticalHash: ${criticalHashOf(files)}`);
   console.log(`contentHash:  ${contentHashOf(files, config.preserve || [])}`);
+
+  const { texts, problems } = readChangelogTexts();
+  if (problems.length) throw new Error(`Changelog problems:\n  ${problems.join('\n  ')}`);
+  console.log(`changelog: ${Object.keys(texts).length} versions with text`);
 }
 
-const commands = { check, publish, remove };
+const commands = { check, publish, remove, changelog };
 const command = commands[process.argv[2]];
 if (!command) {
-  console.error('Usage: node tools/publish.mjs check|publish|remove');
+  console.error('Usage: node tools/publish.mjs check|publish|remove|changelog');
   process.exit(2);
 }
 Promise.resolve(command()).catch((e) => {
