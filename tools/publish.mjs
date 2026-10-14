@@ -305,7 +305,8 @@ function writeChangelog(pagesDir, index, releases, key) {
     if (!manifests[version]) console.warn(`changelog: ${version}.md belongs to a version that does not exist (yet), it is shown once the version is published`);
   }
   const data = buildChangelog(index, releases, manifests, texts);
-  const fingerprint = sha256(JSON.stringify(data));
+  // The page template is part of the fingerprint, so a changed template is republished as well.
+  const fingerprint = sha256(JSON.stringify(data) + sha256(renderChangelogHtml.toString()));
   const file = path.join(pagesDir, 'changelog.json');
   if (index.changelogHash === fingerprint && fs.existsSync(file) && fs.existsSync(path.join(pagesDir, 'changelog.html'))) {
     return false;
@@ -338,6 +339,8 @@ function renderChangelogHtml(data) {
   .tabs { display:flex; flex-wrap:wrap; gap:6px; }
   button, input, select { font:inherit; color:inherit; background:transparent; border:1px solid var(--line); border-radius:6px; padding:5px 10px; }
   button { cursor:pointer; }
+  button.all { margin-right:14px; position:relative; }
+  button.all::after { content:""; position:absolute; right:-11px; top:15%; bottom:15%; width:1px; background:currentColor; opacity:.35; }
   button[aria-selected="true"] { border-color:var(--accent); color:var(--accent); }
   input { flex:1; min-width:160px; }
   article { border-top:1px solid var(--line); padding:14px 0; }
@@ -345,6 +348,8 @@ function renderChangelogHtml(data) {
   h2 { font-size:17px; margin:0; }
   h2 a { color:inherit; text-decoration:none; }
   .meta { color:var(--muted); font-size:13px; margin:2px 0 6px; }
+  .tag { display:inline-block; border:1px solid currentColor; border-radius:4px; padding:0 7px; font-size:12px; font-weight:600; margin-right:6px; }
+  .tag.on { color:#fff !important; }
   .badge { border:1px solid var(--accent); color:var(--accent); border-radius:10px; padding:0 7px; font-size:12px; margin-left:6px; }
   p { margin:6px 0; } ul { margin:6px 0; padding-left:22px; } code { background:color-mix(in srgb, var(--muted) 20%, transparent); padding:0 4px; border-radius:3px; }
   .empty { color:var(--muted); padding:24px 0; }
@@ -367,7 +372,9 @@ function renderChangelogHtml(data) {
   var tabsEl = document.getElementById('tabs'), listEl = document.getElementById('list');
   var qEl = document.getElementById('q'), langEl = document.getElementById('lang');
   var names = Object.keys(data.releases).sort(function (a, b) { return a === 'main' ? -1 : b === 'main' ? 1 : a.localeCompare(b); });
-  var label = function (n) { return n === 'main' ? 'Stable' : n; };
+  var PALETTE = ['#fb8c00', '#1e88e5', '#8e24aa', '#d81b60', '#00897b', '#6d4c41', '#7cb342', '#5e35b1'];
+  var color = function (n) { if (n === 'main') return '#43a047'; var o = names.filter(function (x) { return x !== 'main'; }).sort(); return PALETTE[Math.max(0, o.indexOf(n)) % PALETTE.length]; };
+  var label = function (n) { return n === 'main' ? 'Stable' : n.charAt(0).toUpperCase() + n.slice(1); };
   var params = new URLSearchParams(location.search);
   var tab = params.get('release') || (names.indexOf('main') >= 0 ? 'main' : names[0]) || 'all';
   langEl.value = params.get('lang') || ((navigator.language || 'en').slice(0, 2) === 'de' ? 'de' : 'en');
@@ -406,9 +413,10 @@ function renderChangelogHtml(data) {
   }
   function render() {
     tabsEl.textContent = '';
-    names.concat(['all']).forEach(function (n) {
+    ['all'].concat(names).forEach(function (n) {
       var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', String(n === tab));
       b.textContent = n === 'all' ? 'All versions' : label(n);
+      if (n === 'all') b.className = 'all';
       b.onclick = function () { tab = n; render(); }; tabsEl.appendChild(b);
     });
     var q = qEl.value.trim().toLowerCase().replace(/^v/, '');
@@ -423,8 +431,15 @@ function renderChangelogHtml(data) {
       var h = document.createElement('h2'), a = document.createElement('a'); a.href = '#v' + r.version; a.textContent = 'Version ' + r.version; h.appendChild(a);
       if (tab !== 'all' && data.releases[tab].current === r.version) { var cur = document.createElement('span'); cur.className = 'badge'; cur.textContent = 'current'; h.appendChild(cur); }
       var meta = document.createElement('div'); meta.className = 'meta';
-      var parts = releasesOf(r.version).map(function (x) { return label(x.name) + ' ' + fmt(x.at); });
-      meta.textContent = parts.length ? parts.join(' \\u2192 ') : 'not released (built ' + fmt(v.created) + ')';
+      var rel = releasesOf(r.version);
+      rel.forEach(function (x) {
+        var t = document.createElement('span'), now = data.releases[x.name].current === r.version;
+        t.className = 'tag' + (now ? ' on' : ''); t.textContent = label(x.name);
+        t.style.color = color(x.name); if (now) t.style.background = color(x.name);
+        t.title = label(x.name) + (now ? ' (current) ' : ' (replaced) ') + fmt(x.at);
+        meta.appendChild(t); meta.appendChild(document.createTextNode(fmt(x.at) + '  '));
+      });
+      if (!rel.length) meta.textContent = 'not released (built ' + fmt(v.created) + ')';
       art.appendChild(h); art.appendChild(meta);
       if (text) markdown(art, text); else if (v.message) { var m = document.createElement('p'); m.textContent = v.message; art.appendChild(m); }
       listEl.appendChild(art);
