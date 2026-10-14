@@ -18,6 +18,15 @@
       "text": {
         "default": "# First Preview\nThis is a first test to see the system working."
       }
+    },
+    "3": {
+      "created": "2026-10-14T18:59:34.690Z",
+      "branch": "Preview",
+      "commit": "4c3582d",
+      "message": "update preview",
+      "text": {
+        "default": "# Second Preview\nFirst change here."
+      }
     }
   },
   "releases": {
@@ -31,8 +40,12 @@
       ]
     },
     "Preview": {
-      "current": 2,
+      "current": 3,
       "versions": [
+        {
+          "version": 3,
+          "at": "2026-10-14T18:59:34.692Z"
+        },
         {
           "version": 2,
           "at": "2026-10-14T17:30:44.218Z"
@@ -40,6 +53,6 @@
       ]
     }
   },
-  "seq": 6,
-  "updated": "2026-10-14T18:53:43.132Z"
+  "seq": 7,
+  "updated": "2026-10-14T18:59:34.701Z"
 }

@@ -1,6 +1,6 @@
 {
-  "latestVersion": 2,
-  "seq": 5,
+  "latestVersion": 3,
+  "seq": 6,
   "objects": {
     "ba3e46fed9a49c18e634885c18388892f7645912e443231ff79e64c57ae4079a": {
       "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ba3e46fed9a49c18e634885c18388892f7645912e443231ff79e64c57ae4079a",
@@ -69,11 +69,16 @@
     "ba119918d4aa2d65b9e5ecc7edb4fe8ecc422f84fc34ed93a61a319b8cefe99a": {
       "url": "https://github.com/fbreuss/s4-content/releases/download/v2/ba119918d4aa2d65b9e5ecc7edb4fe8ecc422f84fc34ed93a61a319b8cefe99a",
       "size": 1723051
+    },
+    "c83a0057abffc26df23f129600ee6dc405ac66c626e8b17c4b55ecee94737d19": {
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v3/c83a0057abffc26df23f129600ee6dc405ac66c626e8b17c4b55ecee94737d19",
+      "size": 1457621
     }
   },
   "contentVersions": {
     "8ab35e8cf9a6870ec03e9a7d3dda13002a0ff21708a269d3220b8047e78dc098": 1,
-    "e699facc933f4213766085700c70a9fb85674aa8c2b14e6637fe180a1daaad77": 2
+    "e699facc933f4213766085700c70a9fb85674aa8c2b14e6637fe180a1daaad77": 2,
+    "efedf492bf61afdd28625d8e537ff2bf5f7b988373138bb649cdac732b49e509": 3
   },
   "releaseHistory": {
     "main": [
@@ -92,9 +97,13 @@
       {
         "version": 2,
         "at": "2026-10-14T17:30:44.218Z"
+      },
+      {
+        "version": 3,
+        "at": "2026-10-14T18:59:34.692Z"
       }
     ]
   },
-  "changelogSeq": 6,
-  "changelogHash": "dac57766a8ad898c240979b663321ba817771e1e4b8e9e012eefde4bcec20e8a"
+  "changelogSeq": 7,
+  "changelogHash": "d799208a943030190901a9fffde97fced8a807af99d4b26611ecd2ae34821d1f"
 }
