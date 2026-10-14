@@ -1,6 +1,6 @@
 {
   "latestVersion": 2,
-  "seq": 4,
+  "seq": 5,
   "objects": {
     "ba3e46fed9a49c18e634885c18388892f7645912e443231ff79e64c57ae4079a": {
       "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ba3e46fed9a49c18e634885c18388892f7645912e443231ff79e64c57ae4079a",
@@ -95,6 +95,6 @@
       }
     ]
   },
-  "changelogSeq": 3,
-  "changelogHash": "1a2dec8c324f82a08d84ce90931ed4f9b18022bee53156b77e4e14ed65096532"
+  "changelogSeq": 4,
+  "changelogHash": "bf406de875eac1a9f3fe2120ab463bc12c7f58991c9c24d8179c849923b876c1"
 }
