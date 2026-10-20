@@ -27,6 +27,15 @@
       "text": {
         "default": "# Second Preview\nFirst change here."
       }
+    },
+    "4": {
+      "created": "2026-10-20T17:38:16.505Z",
+      "branch": "Preview",
+      "commit": "f60058d",
+      "message": "update preview",
+      "text": {
+        "default": "Adds the HookRegistry: detects overlaps and address reusages as well as external hooks and patches based on a comparison to the local original unpatched exe."
+      }
     }
   },
   "releases": {
@@ -40,8 +49,12 @@
       ]
     },
     "Preview": {
-      "current": 3,
+      "current": 4,
       "versions": [
+        {
+          "version": 4,
+          "at": "2026-10-20T17:38:16.506Z"
+        },
         {
           "version": 3,
           "at": "2026-10-14T18:59:34.692Z"
@@ -53,6 +66,6 @@
       ]
     }
   },
-  "seq": 7,
-  "updated": "2026-10-14T18:59:34.701Z"
+  "seq": 8,
+  "updated": "2026-10-20T17:38:16.513Z"
 }
