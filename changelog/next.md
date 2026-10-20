@@ -1,2 +1,1 @@
-# Second Preview
-First change here.
+Adds the HookRegistry: detects overlaps and address reusages as well as external hooks and patches based on a comparison to the local original unpatched exe.
