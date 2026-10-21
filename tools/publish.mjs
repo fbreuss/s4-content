@@ -343,15 +343,16 @@ function renderChangelogHtml(data) {
   button.all::after { content:""; position:absolute; right:-11px; top:15%; bottom:15%; width:1px; background:currentColor; opacity:.35; }
   button[aria-selected="true"] { border-color:var(--accent); color:var(--accent); }
   input { flex:1; min-width:160px; }
-  article { border-top:1px solid var(--line); padding:14px 0; }
+  article { border-top:1px solid var(--line); border-left:4px solid transparent; padding:18px 14px; }
   article.hl { background:color-mix(in srgb, var(--accent) 12%, transparent); }
-  h2 { font-size:21px; margin:0; }
+  h2 { font-size:30px; font-weight:700; line-height:1.2; margin:0 0 6px; }
   h4 { font-size:18px; font-weight:700; line-height:1.3; margin:16px 0 4px; }
   h2 a { color:inherit; text-decoration:none; }
   .meta { color:var(--muted); font-size:13px; margin:2px 0 6px; }
   .tag { display:inline-block; border:1px solid currentColor; border-radius:4px; padding:1px 10px; font-size:14px; font-weight:700; letter-spacing:.02em; margin-right:8px; vertical-align:middle; }
   .tag.on { color:#fff !important; }
-  .badge { border:1px solid var(--accent); color:var(--accent); border-radius:10px; padding:1px 10px; font-size:13px; margin-left:6px; vertical-align:middle; }
+  article.cur { background:color-mix(in srgb, var(--cur) 14%, transparent); border-left-color:var(--cur); border-radius:0 6px 6px 0; }
+  .legend { color:var(--muted); font-size:13px; margin:-6px 0 10px; }
   p { margin:6px 0; } ul { margin:6px 0; padding-left:22px; } code { background:color-mix(in srgb, var(--muted) 20%, transparent); padding:0 4px; border-radius:3px; }
   .empty { color:var(--muted); padding:24px 0; }
 </style>
@@ -364,6 +365,7 @@ function renderChangelogHtml(data) {
   <input id="q" type="search" placeholder="Search version or text" aria-label="Search">
   <select id="lang" aria-label="Language"><option value="en">English</option><option value="de">Deutsch</option></select>
 </div>
+<div class="legend">The highlighted entry is the version a release currently points to.</div>
 <div id="list"></div>
 </main>
 <script type="application/json" id="data">${json}</script>
@@ -430,7 +432,8 @@ function renderChangelogHtml(data) {
       shown++;
       var art = document.createElement('article'); art.id = 'v' + r.version; if (String(r.version) === focus) art.className = 'hl';
       var h = document.createElement('h2'), a = document.createElement('a'); a.href = '#v' + r.version; a.textContent = 'Version ' + r.version; h.appendChild(a);
-      if (tab !== 'all' && data.releases[tab].current === r.version) { var cur = document.createElement('span'); cur.className = 'badge'; cur.textContent = 'current'; h.appendChild(cur); }
+      var curOf = tab !== 'all' ? (data.releases[tab].current === r.version ? tab : null) : (names.filter(function (n) { return data.releases[n].current === r.version; })[0] || null);
+      if (curOf) { art.className += (art.className ? ' ' : '') + 'cur'; art.style.setProperty('--cur', color(curOf)); }
       var meta = document.createElement('div'); meta.className = 'meta';
       var rel = releasesOf(r.version);
       rel.forEach(function (x) {

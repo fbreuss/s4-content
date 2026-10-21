@@ -1,1 +1,1 @@
-Adds the HookRegistry: detects overlaps and address reusages as well as external hooks and patches based on a comparison to the local original unpatched exe.
+Fix HookRegistry detections and DebugOverlay-crashes in combination with SU.
