@@ -18,15 +18,16 @@
   button.all::after { content:""; position:absolute; right:-11px; top:15%; bottom:15%; width:1px; background:currentColor; opacity:.35; }
   button[aria-selected="true"] { border-color:var(--accent); color:var(--accent); }
   input { flex:1; min-width:160px; }
-  article { border-top:1px solid var(--line); padding:14px 0; }
+  article { border-top:1px solid var(--line); border-left:4px solid transparent; padding:18px 14px; }
   article.hl { background:color-mix(in srgb, var(--accent) 12%, transparent); }
-  h2 { font-size:21px; margin:0; }
+  h2 { font-size:30px; font-weight:700; line-height:1.2; margin:0 0 6px; }
   h4 { font-size:18px; font-weight:700; line-height:1.3; margin:16px 0 4px; }
   h2 a { color:inherit; text-decoration:none; }
   .meta { color:var(--muted); font-size:13px; margin:2px 0 6px; }
   .tag { display:inline-block; border:1px solid currentColor; border-radius:4px; padding:1px 10px; font-size:14px; font-weight:700; letter-spacing:.02em; margin-right:8px; vertical-align:middle; }
   .tag.on { color:#fff !important; }
-  .badge { border:1px solid var(--accent); color:var(--accent); border-radius:10px; padding:1px 10px; font-size:13px; margin-left:6px; vertical-align:middle; }
+  article.cur { background:color-mix(in srgb, var(--cur) 14%, transparent); border-left-color:var(--cur); border-radius:0 6px 6px 0; }
+  .legend { color:var(--muted); font-size:13px; margin:-6px 0 10px; }
   p { margin:6px 0; } ul { margin:6px 0; padding-left:22px; } code { background:color-mix(in srgb, var(--muted) 20%, transparent); padding:0 4px; border-radius:3px; }
   .empty { color:var(--muted); padding:24px 0; }
 </style>
@@ -39,9 +40,10 @@
   <input id="q" type="search" placeholder="Search version or text" aria-label="Search">
   <select id="lang" aria-label="Language"><option value="en">English</option><option value="de">Deutsch</option></select>
 </div>
+<div class="legend">The highlighted entry is the version a release currently points to.</div>
 <div id="list"></div>
 </main>
-<script type="application/json" id="data">{"format":1,"versions":{"1":{"created":"2026-10-06T08:23:10.163Z","branch":"main","commit":"177fde9","message":"Update Readme","text":{"default":"# A new era for Settlers 4 updates\n\nThe Settlers United mod files for Settlers IV now have a home of their own: balancing, plugin and everything that goes with it reach you **independently of the launcher** – no launcher update, no reinstall.\n\n# What changes for you\n\n- **Faster updates:** New balancing changes and plugin versions are there at your next start.\n- **Stable or Preview:** Select the version you like in \"Create new game\" and in the Launcher-settings (Settlers IV, Tools) and choose between 'stable' or 'preview' to test upcoming changes before everyone else.\n- **Secure:** All files are signed and verified before installation.\n- **Replays:** This update was needed as starting point to support Replays. When joining a game or playing a replay, the launcher automatically loads exactly the version it was played with – replays stay playable after future updates. This ist yet **work in progress** as a **debugging feature** for now. A nice user interface to load Replays will follow soon.\n\nThis is the starting shot. It's going to get exciting. 🚀"}},"2":{"created":"2026-10-14T09:58:19.378Z","branch":"preview","commit":"412fb71","message":"update preview","text":{"default":"# First Preview\nThis is a first test to see the system working."}},"3":{"created":"2026-10-14T18:59:34.690Z","branch":"Preview","commit":"4c3582d","message":"update preview","text":{"default":"# Second Preview\nFirst change here."}},"4":{"created":"2026-10-20T17:38:16.505Z","branch":"Preview","commit":"f60058d","message":"update preview","text":{"default":"Adds the HookRegistry: detects overlaps and address reusages as well as external hooks and patches based on a comparison to the local original unpatched exe."}}},"releases":{"main":{"current":1,"versions":[{"version":1,"at":"2026-10-06T08:23:10.163Z"}]},"Preview":{"current":4,"versions":[{"version":4,"at":"2026-10-20T17:38:16.506Z"},{"version":3,"at":"2026-10-14T18:59:34.692Z"},{"version":2,"at":"2026-10-14T17:30:44.218Z"}]}},"seq":8,"updated":"2026-10-20T17:38:16.513Z"}</script>
+<script type="application/json" id="data">{"format":1,"versions":{"1":{"created":"2026-10-06T08:23:10.163Z","branch":"main","commit":"177fde9","message":"Update Readme","text":{"default":"# A new era for Settlers 4 updates\n\nThe Settlers United mod files for Settlers IV now have a home of their own: balancing, plugin and everything that goes with it reach you **independently of the launcher** – no launcher update, no reinstall.\n\n# What changes for you\n\n- **Faster updates:** New balancing changes and plugin versions are there at your next start.\n- **Stable or Preview:** Select the version you like in \"Create new game\" and in the Launcher-settings (Settlers IV, Tools) and choose between 'stable' or 'preview' to test upcoming changes before everyone else.\n- **Secure:** All files are signed and verified before installation.\n- **Replays:** This update was needed as starting point to support Replays. When joining a game or playing a replay, the launcher automatically loads exactly the version it was played with – replays stay playable after future updates. This ist yet **work in progress** as a **debugging feature** for now. A nice user interface to load Replays will follow soon.\n\nThis is the starting shot. It's going to get exciting. 🚀"}},"2":{"created":"2026-10-14T09:58:19.378Z","branch":"preview","commit":"412fb71","message":"update preview","text":{"default":"# First Preview\nThis is a first test to see the system working."}},"3":{"created":"2026-10-14T18:59:34.690Z","branch":"Preview","commit":"4c3582d","message":"update preview","text":{"default":"# Second Preview\nFirst change here."}},"4":{"created":"2026-10-20T17:38:16.505Z","branch":"Preview","commit":"f60058d","message":"update preview","text":{"default":"Adds the HookRegistry: detects overlaps and address reusages as well as external hooks and patches based on a comparison to the local original unpatched exe."}},"5":{"created":"2026-10-21T07:02:47.834Z","branch":"Preview","commit":"5d4c661","message":"update preview","text":{"default":"Fix HookRegistry detections and DebugOverlay-crashes in combination with SU."}}},"releases":{"main":{"current":1,"versions":[{"version":1,"at":"2026-10-06T08:23:10.163Z"}]},"Preview":{"current":5,"versions":[{"version":5,"at":"2026-10-21T07:02:47.835Z"},{"version":4,"at":"2026-10-20T17:38:16.506Z"},{"version":3,"at":"2026-10-14T18:59:34.692Z"},{"version":2,"at":"2026-10-14T17:30:44.218Z"}]}},"seq":9,"updated":"2026-10-21T07:02:47.912Z"}</script>
 <script>
 (function () {
   var data = JSON.parse(document.getElementById('data').textContent);
@@ -105,7 +107,8 @@
       shown++;
       var art = document.createElement('article'); art.id = 'v' + r.version; if (String(r.version) === focus) art.className = 'hl';
       var h = document.createElement('h2'), a = document.createElement('a'); a.href = '#v' + r.version; a.textContent = 'Version ' + r.version; h.appendChild(a);
-      if (tab !== 'all' && data.releases[tab].current === r.version) { var cur = document.createElement('span'); cur.className = 'badge'; cur.textContent = 'current'; h.appendChild(cur); }
+      var curOf = tab !== 'all' ? (data.releases[tab].current === r.version ? tab : null) : (names.filter(function (n) { return data.releases[n].current === r.version; })[0] || null);
+      if (curOf) { art.className += (art.className ? ' ' : '') + 'cur'; art.style.setProperty('--cur', color(curOf)); }
       var meta = document.createElement('div'); meta.className = 'meta';
       var rel = releasesOf(r.version);
       rel.forEach(function (x) {

@@ -36,6 +36,15 @@
       "text": {
         "default": "Adds the HookRegistry: detects overlaps and address reusages as well as external hooks and patches based on a comparison to the local original unpatched exe."
       }
+    },
+    "5": {
+      "created": "2026-10-21T07:02:47.834Z",
+      "branch": "Preview",
+      "commit": "5d4c661",
+      "message": "update preview",
+      "text": {
+        "default": "Fix HookRegistry detections and DebugOverlay-crashes in combination with SU."
+      }
     }
   },
   "releases": {
@@ -49,8 +58,12 @@
       ]
     },
     "Preview": {
-      "current": 4,
+      "current": 5,
       "versions": [
+        {
+          "version": 5,
+          "at": "2026-10-21T07:02:47.835Z"
+        },
         {
           "version": 4,
           "at": "2026-10-20T17:38:16.506Z"
@@ -66,6 +79,6 @@
       ]
     }
   },
-  "seq": 8,
-  "updated": "2026-10-20T17:38:16.513Z"
+  "seq": 9,
+  "updated": "2026-10-21T07:02:47.912Z"
 }
