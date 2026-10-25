@@ -45,6 +45,15 @@
       "text": {
         "default": "Fix HookRegistry detections and DebugOverlay-crashes in combination with SU."
       }
+    },
+    "6": {
+      "created": "2026-10-25T10:46:09.171Z",
+      "branch": "Preview",
+      "commit": "5672198",
+      "message": "update preview",
+      "text": {
+        "default": "# Notes\nAs this is a very huge overhaul of the previous patches, there are still some **things to improve here**. If you find anything not quite intuitive (e.g. descriptions) or know a better solution for, **let me know on Discord** :D\n\n\n# Fixed\n- No FE but a warning instead if you join a game and do not have the correct map locally (see section Added for *Automatic Map and Script Exchange*).\n- Fixed a FE at the lobby screen when changing the balancing option.\n- Tutorial-events stayed active in lobby, leading to FEs when e.g. pressing space.\n- Better Chat Symbols: now working for initial messages as well.\n- Ferry unloading: checks properly for ground type, avoiding Entities being stuck on water.\n- Advanced Chat Commands are now properly sent and executed on every machine in parallel avoiding Desyncs (except for the explicit keyword 'local').\n- Fixed speed of entities on pathways, they were off by one.\n- Hotkeys keep working after changing player mid-game.\n- Rightclick now copies the proper chat message (it often took the wrong line).\n- SULib: SU.GameData.Set-Functions now clamp the parameter instead of modulo (e.g. 256 -> 255 instead of 0).\n\n\n# Added\n- Balancing-files are reloaded at every single map-start to prevent desyncs due to old settings (e.g. a player with who played UBO joins now UBO-Test).\n- Added CRC-checks inside the lobby and at game-start, checking all balancing relevant things (Maps, Files, Scripts, Settings) -> find mismatching settings before playing.\n- Invite-button: a menu shows up listing all your Ubisoft friends to directly invite them into your game.\n- Ferry instant unloader. Note that vehicles might still be in there, as they would usually be spawned at last (furthest away), which might not always be desired as they are kind of unprotected there - can be adjusted if wanted.\n- Player-change updates the GUI as well. Note that texts are not updated yet.\n\n- **Workingarea for big temples** let priest go there automatically.\n\n- **Automatic Map and Script Exchange**: when you join a game, the map and script (internal and external ones!) are both checked and if not existent on your machine automatically downloaded directly from the host - no need to exchange any maps/scripts anymore!\n\n- **PioneerPath**: you can now let pioneers capture a path from A to B automatically. It's by design a bit wider than needed with some natural variations s.t. micromanaging is still quicker. You can start it **via GUI** or **Shift+rightclicking** the selected ones from their mean position the the mouse coordinate.\n\n- **Geologists variable precision**: you can define the precision (coarse, normal, fine) of geologists **via GUI** or by **Ctrl(coarse) / Shift(fine) + rightclicking**.\n\n- **Replay-System**: for now it's only there **for debugging** and there are a few known bugs, so use at own risk!\n\n\n# Changed\n- **Refactoring**: this is a huge refactoring, **checking every single patch/mod** once again, rewriting some, making it much easier to extend and add new ones and improving the overall **game stability** a lot. As there might still be **some bugs left**, these nice features stay in **Preview for now**."
+      }
     }
   },
   "releases": {
@@ -58,8 +67,12 @@
       ]
     },
     "Preview": {
-      "current": 5,
+      "current": 6,
       "versions": [
+        {
+          "version": 6,
+          "at": "2026-10-25T10:46:09.173Z"
+        },
         {
           "version": 5,
           "at": "2026-10-21T07:02:47.835Z"
@@ -79,6 +92,6 @@
       ]
     }
   },
-  "seq": 9,
-  "updated": "2026-10-21T07:02:47.912Z"
+  "seq": 10,
+  "updated": "2026-10-25T10:46:09.180Z"
 }

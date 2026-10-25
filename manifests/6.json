@@ -1,0 +1,115 @@
+{
+  "format": 1,
+  "version": 6,
+  "created": "2026-10-25T10:46:09.171Z",
+  "branch": "Preview",
+  "commit": "5672198756ed3c4b06bf3af2ed29ecd0bc4ebd12",
+  "message": "update preview",
+  "contentHash": "7d892c53270aa83201a083a817d5414c1052b4d3de08d408abc766e62bf5d1e2",
+  "criticalHash": "dd4c277eb1b77b39aa864eeff6424d834287db2f1fd98b21511f50b6d792a3c6",
+  "preserve": [],
+  "notes": {
+    "default": "# Notes\nAs this is a very huge overhaul of the previous patches, there are still some **things to improve here**. If you find anything not quite intuitive (e.g. descriptions) or know a better solution for, **let me know on Discord** :D\n\n\n# Fixed\n- No FE but a warning instead if you join a game and do not have the correct map locally (see section Added for *Automatic Map and Script Exchange*).\n- Fixed a FE at the lobby screen when changing the balancing option.\n- Tutorial-events stayed active in lobby, leading to FEs when e.g. pressing space.\n- Better Chat Symbols: now working for initial messages as well.\n- Ferry unloading: checks properly for ground type, avoiding Entities being stuck on water.\n- Advanced Chat Commands are now properly sent and executed on every machine in parallel avoiding Desyncs (except for the explicit keyword 'local').\n- Fixed speed of entities on pathways, they were off by one.\n- Hotkeys keep working after changing player mid-game.\n- Rightclick now copies the proper chat message (it often took the wrong line).\n- SULib: SU.GameData.Set-Functions now clamp the parameter instead of modulo (e.g. 256 -> 255 instead of 0).\n\n\n# Added\n- Balancing-files are reloaded at every single map-start to prevent desyncs due to old settings (e.g. a player with who played UBO joins now UBO-Test).\n- Added CRC-checks inside the lobby and at game-start, checking all balancing relevant things (Maps, Files, Scripts, Settings) -> find mismatching settings before playing.\n- Invite-button: a menu shows up listing all your Ubisoft friends to directly invite them into your game.\n- Ferry instant unloader. Note that vehicles might still be in there, as they would usually be spawned at last (furthest away), which might not always be desired as they are kind of unprotected there - can be adjusted if wanted.\n- Player-change updates the GUI as well. Note that texts are not updated yet.\n\n- **Workingarea for big temples** let priest go there automatically.\n\n- **Automatic Map and Script Exchange**: when you join a game, the map and script (internal and external ones!) are both checked and if not existent on your machine automatically downloaded directly from the host - no need to exchange any maps/scripts anymore!\n\n- **PioneerPath**: you can now let pioneers capture a path from A to B automatically. It's by design a bit wider than needed with some natural variations s.t. micromanaging is still quicker. You can start it **via GUI** or **Shift+rightclicking** the selected ones from their mean position the the mouse coordinate.\n\n- **Geologists variable precision**: you can define the precision (coarse, normal, fine) of geologists **via GUI** or by **Ctrl(coarse) / Shift(fine) + rightclicking**.\n\n- **Replay-System**: for now it's only there **for debugging** and there are a few known bugs, so use at own risk!\n\n\n# Changed\n- **Refactoring**: this is a huge refactoring, **checking every single patch/mod** once again, rewriting some, making it much easier to extend and add new ones and improving the overall **game stability** a lot. As there might still be **some bugs left**, these nice features stay in **Preview for now**."
+  },
+  "files": [
+    {
+      "path": "s4_artifacts/BalanceConfigs.zip",
+      "sha256": "c83a0057abffc26df23f129600ee6dc405ac66c626e8b17c4b55ecee94737d19",
+      "size": 1457621,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v3/c83a0057abffc26df23f129600ee6dc405ac66c626e8b17c4b55ecee94737d19"
+    },
+    {
+      "path": "s4_artifacts/Edition_HE.zip",
+      "sha256": "38602656b2c2591ad53d5d66a72f9f198419d412150fbb94842dd284ab1e7a1f",
+      "size": 31314212,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/38602656b2c2591ad53d5d66a72f9f198419d412150fbb94842dd284ab1e7a1f"
+    },
+    {
+      "path": "s4_artifacts/Editor_Plus.zip",
+      "sha256": "ad0e7f92c04fb50292b150c5d0ae6e3e4dd6d3cf2ab7423349a0345dea7e6689",
+      "size": 181340,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ad0e7f92c04fb50292b150c5d0ae6e3e4dd6d3cf2ab7423349a0345dea7e6689"
+    },
+    {
+      "path": "s4_artifacts/Editor_withFix.zip",
+      "sha256": "ad5cac2f52f420f0db3855bd6495f7566d095b7f2f91f041a5b697e53d703e6c",
+      "size": 593639,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ad5cac2f52f420f0db3855bd6495f7566d095b7f2f91f041a5b697e53d703e6c"
+    },
+    {
+      "path": "s4_artifacts/Editor_withoutFix.zip",
+      "sha256": "83b60043f3fb28876f16356e830ab19959f21cc779fbe3ba812918f2deba07e3",
+      "size": 607809,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/83b60043f3fb28876f16356e830ab19959f21cc779fbe3ba812918f2deba07e3"
+    },
+    {
+      "path": "s4_artifacts/Maps_MissionOverhaul.zip",
+      "sha256": "54e2c260be1222cbd1f8c7b91801f75f6c55e7e00968d39e8c551e163284ce58",
+      "size": 1520144,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/54e2c260be1222cbd1f8c7b91801f75f6c55e7e00968d39e8c551e163284ce58"
+    },
+    {
+      "path": "s4_artifacts/Maps_Originals.zip",
+      "sha256": "493caa7639c7ae85a46286d3db8cc4abc4e1a769e3989e94bbfcd8b3827663b1",
+      "size": 1529179,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/493caa7639c7ae85a46286d3db8cc4abc4e1a769e3989e94bbfcd8b3827663b1"
+    },
+    {
+      "path": "s4_artifacts/Music_NoBing.zip",
+      "sha256": "0a72e00a3e1c58368b54d435f571ea97fee6135df9884cd5dcdf8397b07572dc",
+      "size": 9034378,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/0a72e00a3e1c58368b54d435f571ea97fee6135df9884cd5dcdf8397b07572dc"
+    },
+    {
+      "path": "s4_artifacts/Music_S3_false.zip",
+      "sha256": "9c21bb4a46703825f7df24855ef8d55f36f1f614f50b225e605c8c5279b40dc8",
+      "size": 1082,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/9c21bb4a46703825f7df24855ef8d55f36f1f614f50b225e605c8c5279b40dc8"
+    },
+    {
+      "path": "s4_artifacts/Music_S3_true.zip",
+      "sha256": "f970562749f01ed6f4a9a3043d9ecad1d04b6060997a3fb30806fd24e47cbbff",
+      "size": 1234,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/f970562749f01ed6f4a9a3043d9ecad1d04b6060997a3fb30806fd24e47cbbff"
+    },
+    {
+      "path": "s4_artifacts/Plugin_HDPatch_Remove.zip",
+      "sha256": "5c75c79f89591b95b9226c3785d4e251ed21172e10f637d211f5b595ad11a2e6",
+      "size": 187,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/5c75c79f89591b95b9226c3785d4e251ed21172e10f637d211f5b595ad11a2e6"
+    },
+    {
+      "path": "s4_artifacts/Plugin_SU.zip",
+      "sha256": "2d7f0804b299fc0cd7967846671376bd92b335ac3351a29b97a1e26f9e31f0f0",
+      "size": 1845413,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v6/2d7f0804b299fc0cd7967846671376bd92b335ac3351a29b97a1e26f9e31f0f0"
+    },
+    {
+      "path": "s4_artifacts/Plugin_Zoom.zip",
+      "sha256": "7c6bf5d4a605d10f8c212998c51fbbfd75e4c299bfec5a266a4b98f7de158933",
+      "size": 115205,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/7c6bf5d4a605d10f8c212998c51fbbfd75e4c299bfec5a266a4b98f7de158933"
+    },
+    {
+      "path": "s4_artifacts/Textures_NewWorld.zip",
+      "sha256": "2a45e095a64e32c794a25da0f8f75314a5baa83afa34200e65db435c31091849",
+      "size": 17144954,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/2a45e095a64e32c794a25da0f8f75314a5baa83afa34200e65db435c31091849"
+    },
+    {
+      "path": "s4_artifacts/Textures_OldWorld.zip",
+      "sha256": "2fe6c88d22e2a8819afe73ea347f5350613ffba6119babdbb3f2d0588751d997",
+      "size": 14954065,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/2fe6c88d22e2a8819afe73ea347f5350613ffba6119babdbb3f2d0588751d997"
+    },
+    {
+      "path": "settlers-united.dll",
+      "sha256": "3c55e057b5eb1564c8b1bd97674204a11e24e8522592e094f9ca19fe0dbba8e9",
+      "size": 6939136,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v6/3c55e057b5eb1564c8b1bd97674204a11e24e8522592e094f9ca19fe0dbba8e9"
+    }
+  ]
+}
