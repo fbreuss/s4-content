@@ -1,1 +1,71 @@
-Update Balancing UBO-Test to 4.0.7 of Launcher Release 0.9.265.
+# Fixed
+- Implemented experimental changes (these are only enabled for UBO-TEST and Tournament lobbies):
+	- Fixes the working area visualization of Big Temples.
+	- **Damaged entity lists**: fixes lost goods and settlers and the crashes they caused. Already broken savegames are repaired automatically. (**many thanks to pikechu**)
+	- Empty storage slots are free again, even if carriers were still on their way.
+	- The X key opens the resource priorities even if the production tab wasn't open yet.
+	- Fixes greying out of menu buttons.
+- Lobby:
+	- Fixes some crashes when different Release-Versions try to join each other directly in the game. Remember to **join via SU** instead of in-game multiplayer menu!
+	- Removes hardcoded 'thesettlers4' from script paths, but adds a proper installation-path check. This means you can install S4 in any folder you like - you probably shouldn't though...
+	- Hides the script not present warning at statistic screens.
+	- Mapnames of campaigns are now properly displayed.
+	- History lobbies, singleplayer and campaign use the original files again. Leftovers of an earlier UBO game caused desyncs in History lobbies.
+	- Random maps no longer end the game with a file error at the map transfer.
+	- No more crash when leaving a lobby after the host left.
+- Fixes missing texts in menus.
+- Hotkeys only react if S4 is really in the foreground and no longer crash after a GUI reload.
+- Taking land via SU-Lua with an explicit player ID no longer desyncs.
+- UBO lobbies: a defeated host can send SU events again.
+
+
+# Added
+- Implemented experimental changes (these are only enabled for UBO-TEST and Tournament lobbies):
+	- **Toolsmith order list**: tools are made in the order you ordered them instead of alternating. The wider menu shows the list of the sector, where you can move and remove entries. It can be switched off per sector.
+	- **Settings at construction sites**: storages, tool- and weaponsmiths, barracks, vehicle halls, shipyards, ports and marketplaces can already be set up during construction.
+	- **Range displays**: range of priests, area of spells, land of towers at placement and shot range of soldiers in military buildings. All are off by default: enable them in the launcher, the HD menu or via hotkeys, or just hold **Ctrl** (except for tower land). This also shows the range of the priest or military building under the mouse, even of enemies, but not in the fog.
+	- **Buildings**: finished buildings heal 1 HP every 45 ticks, all damaged buildings show smoke and the building menu shows an HP bar. **Smoke positions are WIP**.
+	- **Vehicles**:
+		- carts load faster
+		- **War machines, carts and donkeys get through crowds way faster**.
+		- **Settlers walk around vehicles**.
+	- **Tools**: workers drop their tool when they die or when their building is destroyed.
+	- **Gold goes to construction sites first**: as long as one requests gold, the barracks of its sector don't get any.
+	- Viking spells 'Freeze enemies' and 'Fear' now also affect enemy priests.
+	- Option: Allied AI no longer takes land from human teammates.
+	- **Pause: move the view** with the right mouse button and zoom with the mouse wheel. In multiplayer the host can pause with the pause key if game speed is changeable in the lobby.
+	- The settler overview shows donkeys, the settler search also finds donkeys, carts, war machines and ships.
+	- Chat message if a hunter finds no animals.
+	- **Pings are visible in the fog as well**.
+	- With the HD patch the frame rate is limited to your monitor's refresh rate. It can be switched off in the launcher and the HD menu.
+	- Replays: "Take over..." lets you continue playing as that player from the current point. Adds a search and jumping to a time.
+	- Modding: priestCount and smokePositions in BuildingInfo.xml.
+- Lobby:
+	- Adds graphs to every single **statistic with a timeline (graph)**.
+	- Adds a few new values to the endgame statistic - more on request.
+	- Adds a Reload-button for scripts.
+	- **Version check when joining**: the host only accepts exactly the same SU version, everyone else gets a message with the reason and both versions.
+	- **Clear connection errors**: instead of the generic error the game names the cause and the solution. Right after the game start it keeps trying until the Ubisoft login is done.
+	- The selected script is compared with the host's like a map and downloaded if it differs. You get asked before it is overwritten, declining leaves the lobby.
+- **Hotkey tool**: completely rewritten with readable names (DE, EN, PL), categories, filters, search, a keyboard view, one-click conflict solving and several keys per function. Saving no longer loses unknown entries.
+- UBO lobbies, chat level Cheating: "!skip 5m" fast-forwards, "!skipto 1:30:00" jumps to a game time, "!skip stop" cancels.
+
+
+# Changed
+- Hides the Debug Consoles at game start.
+- Implemented experimental changes (these are only enabled for UBO-TEST and Tournament lobbies):
+	- Geologists: coarse precision radius 2 -> 3.
+- Lobby:
+	- Empty / not set scripts are treated as Option 'Default' from now on.
+	- DynamicGUI: rename @Key to @Var
+	- Option 'Place Piles Outside': goods now land outside the whole area the building needs, so it can be rebuilt on exactly the same spot.
+	- The invite window closes on a click outside of it.
+- Statistics graphs: **Ctrl** switches between total and per minute, hold **Shift** to see the other one. The highest value is now always on the top line.
+- HD menu: 'Game Speed' and 'Network Settings' are merged into 'Speed and Network', the new category 'Range Display' is added.
+- Hotkeys: unknown functions are skipped with a warning instead of stopping all hotkeys, e.g. for replays of older versions.
+- Logs: with automatic log upload enabled, errors during a game now trigger an upload when leaving the map, and a game report (session, game, play time per version) is sent. Failed uploads are retried. Zip and chat message of a desync only appear for the first one of a game.
+- Launcher:
+	- Statistics now match the ones in the game and show up instantly. Own games can be posted to Discord from the match details.
+	- Own games: delete several at once, the list no longer scrolls sideways.
+	- Screenshots of statistics are off by default (can be enabled) and the tab opens faster. **Shift**+click marks a range, here and in own games.
+	- Hovering the version shows its branch (Stable, Preview). Adds missing translations.
