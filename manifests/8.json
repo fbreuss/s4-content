@@ -1,0 +1,151 @@
+{
+  "format": 1,
+  "version": 8,
+  "created": "2026-11-04T07:55:06.344Z",
+  "branch": "Preview",
+  "commit": "524445dcd41f46a96422133c36608fa20fef3ce8",
+  "message": "update preview (plugin, ingame-ui, hotkeysGUI, changelog)",
+  "contentHash": "3ca863da88ba719d78685fbe69231df906d41296487f423298fcf5f680f49802",
+  "criticalHash": "a64704694d469457249288a9ee616ef246d6881127088837cc6ae3126c3890ac",
+  "preserve": [],
+  "notes": {
+    "default": "# Fixed\n- Implemented experimental changes (these are only enabled for UBO-TEST and Tournament lobbies):\n\t- Fixes the working area visualization of Big Temples.\n\t- **Damaged entity lists**: fixes lost goods and settlers and the crashes they caused. Already broken savegames are repaired automatically. (**many thanks to pikechu**)\n\t- Empty storage slots are free again, even if carriers were still on their way.\n\t- The X key opens the resource priorities even if the production tab wasn't open yet.\n\t- Fixes greying out of menu buttons.\n- Lobby:\n\t- Fixes some crashes when different Release-Versions try to join each other directly in the game. Remember to **join via SU** instead of in-game multiplayer menu!\n\t- Removes hardcoded 'thesettlers4' from script paths, but adds a proper installation-path check. This means you can install S4 in any folder you like - you probably shouldn't though...\n\t- Hides the script not present warning at statistic screens.\n\t- Mapnames of campaigns are now properly displayed.\n\t- History lobbies, singleplayer and campaign use the original files again. Leftovers of an earlier UBO game caused desyncs in History lobbies.\n\t- Random maps no longer end the game with a file error at the map transfer.\n\t- No more crash when leaving a lobby after the host left.\n- Fixes missing texts in menus.\n- Hotkeys only react if S4 is really in the foreground and no longer crash after a GUI reload.\n- Taking land via SU-Lua with an explicit player ID no longer desyncs.\n- UBO lobbies: a defeated host can send SU events again.\n\n\n# Added\n- Implemented experimental changes (these are only enabled for UBO-TEST and Tournament lobbies):\n\t- **Toolsmith order list**: tools are made in the order you ordered them instead of alternating. The wider menu shows the list of the sector, where you can move and remove entries. It can be switched off per sector.\n\t- **Settings at construction sites**: storages, tool- and weaponsmiths, barracks, vehicle halls, shipyards, ports and marketplaces can already be set up during construction.\n\t- **Range displays**: range of priests, area of spells, land of towers at placement and shot range of soldiers in military buildings. All are off by default: enable them in the launcher, the HD menu or via hotkeys, or just hold **Ctrl** (except for tower land). This also shows the range of the priest or military building under the mouse, even of enemies, but not in the fog.\n\t- **Buildings**: finished buildings heal 1 HP every 45 ticks, all damaged buildings show smoke and the building menu shows an HP bar. **Smoke positions are WIP**.\n\t- **Vehicles**:\n\t\t- carts load faster\n\t\t- **War machines, carts and donkeys get through crowds way faster**.\n\t\t- **Settlers walk around vehicles**.\n\t- **Tools**: workers drop their tool when they die or when their building is destroyed.\n\t- **Gold goes to construction sites first**: as long as one requests gold, the barracks of its sector don't get any.\n\t- Viking spells 'Freeze enemies' and 'Fear' now also affect enemy priests.\n\t- Option: Allied AI no longer takes land from human teammates.\n\t- **Pause: move the view** with the right mouse button and zoom with the mouse wheel. In multiplayer the host can pause with the pause key if game speed is changeable in the lobby.\n\t- The settler overview shows donkeys, the settler search also finds donkeys, carts, war machines and ships.\n\t- Chat message if a hunter finds no animals.\n\t- **Pings are visible in the fog as well**.\n\t- With the HD patch the frame rate is limited to your monitor's refresh rate. It can be switched off in the launcher and the HD menu.\n\t- Replays: \"Take over...\" lets you continue playing as that player from the current point. Adds a search and jumping to a time.\n\t- Modding: priestCount and smokePositions in BuildingInfo.xml.\n- Lobby:\n\t- Adds graphs to every single **statistic with a timeline (graph)**.\n\t- Adds a few new values to the endgame statistic - more on request.\n\t- Adds a Reload-button for scripts.\n\t- **Version check when joining**: the host only accepts exactly the same SU version, everyone else gets a message with the reason and both versions.\n\t- **Clear connection errors**: instead of the generic error the game names the cause and the solution. Right after the game start it keeps trying until the Ubisoft login is done.\n\t- The selected script is compared with the host's like a map and downloaded if it differs. You get asked before it is overwritten, declining leaves the lobby.\n- **Hotkey tool**: completely rewritten with readable names (DE, EN, PL), categories, filters, search, a keyboard view, one-click conflict solving and several keys per function. Saving no longer loses unknown entries.\n- UBO lobbies, chat level Cheating: \"!skip 5m\" fast-forwards, \"!skipto 1:30:00\" jumps to a game time, \"!skip stop\" cancels.\n\n\n# Changed\n- Hides the Debug Consoles at game start.\n- Implemented experimental changes (these are only enabled for UBO-TEST and Tournament lobbies):\n\t- Geologists: coarse precision radius 2 -> 3.\n- Lobby:\n\t- Empty / not set scripts are treated as Option 'Default' from now on.\n\t- DynamicGUI: rename @Key to @Var\n\t- Option 'Place Piles Outside': goods now land outside the whole area the building needs, so it can be rebuilt on exactly the same spot.\n\t- The invite window closes on a click outside of it.\n- Statistics graphs: **Ctrl** switches between total and per minute, hold **Shift** to see the other one. The highest value is now always on the top line.\n- HD menu: 'Game Speed' and 'Network Settings' are merged into 'Speed and Network', the new category 'Range Display' is added.\n- Hotkeys: unknown functions are skipped with a warning instead of stopping all hotkeys, e.g. for replays of older versions.\n- Logs: with automatic log upload enabled, errors during a game now trigger an upload when leaving the map, and a game report (session, game, play time per version) is sent. Failed uploads are retried. Zip and chat message of a desync only appear for the first one of a game.\n- Launcher:\n\t- Statistics now match the ones in the game and show up instantly. Own games can be posted to Discord from the match details.\n\t- Own games: delete several at once, the list no longer scrolls sideways.\n\t- Screenshots of statistics are off by default (can be enabled) and the tab opens faster. **Shift**+click marks a range, here and in own games.\n\t- Hovering the version shows its branch (Stable, Preview). Adds missing translations."
+  },
+  "files": [
+    {
+      "path": "s4_artifacts/BalanceConfigs.zip",
+      "sha256": "8c1f749c789abf3f9f71a09997f6bbfc0521cacb65318d11eb245e9f2d5df950",
+      "size": 1444852,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/8c1f749c789abf3f9f71a09997f6bbfc0521cacb65318d11eb245e9f2d5df950"
+    },
+    {
+      "path": "s4_artifacts/Edition_HE.zip",
+      "sha256": "38602656b2c2591ad53d5d66a72f9f198419d412150fbb94842dd284ab1e7a1f",
+      "size": 31314212,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/38602656b2c2591ad53d5d66a72f9f198419d412150fbb94842dd284ab1e7a1f"
+    },
+    {
+      "path": "s4_artifacts/Editor_Plus.zip",
+      "sha256": "ad0e7f92c04fb50292b150c5d0ae6e3e4dd6d3cf2ab7423349a0345dea7e6689",
+      "size": 181340,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ad0e7f92c04fb50292b150c5d0ae6e3e4dd6d3cf2ab7423349a0345dea7e6689"
+    },
+    {
+      "path": "s4_artifacts/Editor_withFix.zip",
+      "sha256": "ad5cac2f52f420f0db3855bd6495f7566d095b7f2f91f041a5b697e53d703e6c",
+      "size": 593639,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ad5cac2f52f420f0db3855bd6495f7566d095b7f2f91f041a5b697e53d703e6c"
+    },
+    {
+      "path": "s4_artifacts/Editor_withoutFix.zip",
+      "sha256": "83b60043f3fb28876f16356e830ab19959f21cc779fbe3ba812918f2deba07e3",
+      "size": 607809,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/83b60043f3fb28876f16356e830ab19959f21cc779fbe3ba812918f2deba07e3"
+    },
+    {
+      "path": "s4_artifacts/Maps_MissionOverhaul.zip",
+      "sha256": "54e2c260be1222cbd1f8c7b91801f75f6c55e7e00968d39e8c551e163284ce58",
+      "size": 1520144,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/54e2c260be1222cbd1f8c7b91801f75f6c55e7e00968d39e8c551e163284ce58"
+    },
+    {
+      "path": "s4_artifacts/Maps_Originals.zip",
+      "sha256": "493caa7639c7ae85a46286d3db8cc4abc4e1a769e3989e94bbfcd8b3827663b1",
+      "size": 1529179,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/493caa7639c7ae85a46286d3db8cc4abc4e1a769e3989e94bbfcd8b3827663b1"
+    },
+    {
+      "path": "s4_artifacts/Music_NoBing.zip",
+      "sha256": "0a72e00a3e1c58368b54d435f571ea97fee6135df9884cd5dcdf8397b07572dc",
+      "size": 9034378,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/0a72e00a3e1c58368b54d435f571ea97fee6135df9884cd5dcdf8397b07572dc"
+    },
+    {
+      "path": "s4_artifacts/Music_S3_false.zip",
+      "sha256": "9c21bb4a46703825f7df24855ef8d55f36f1f614f50b225e605c8c5279b40dc8",
+      "size": 1082,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/9c21bb4a46703825f7df24855ef8d55f36f1f614f50b225e605c8c5279b40dc8"
+    },
+    {
+      "path": "s4_artifacts/Music_S3_true.zip",
+      "sha256": "f970562749f01ed6f4a9a3043d9ecad1d04b6060997a3fb30806fd24e47cbbff",
+      "size": 1234,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/f970562749f01ed6f4a9a3043d9ecad1d04b6060997a3fb30806fd24e47cbbff"
+    },
+    {
+      "path": "s4_artifacts/Plugin_HDPatch_Remove.zip",
+      "sha256": "5c75c79f89591b95b9226c3785d4e251ed21172e10f637d211f5b595ad11a2e6",
+      "size": 187,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/5c75c79f89591b95b9226c3785d4e251ed21172e10f637d211f5b595ad11a2e6"
+    },
+    {
+      "path": "s4_artifacts/Plugin_SU.zip",
+      "sha256": "b56065f3c574a13f8d6be4ecc1a05ceeabf2dc2ffbcdf3781a79b8fba69cfd9f",
+      "size": 2221779,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/b56065f3c574a13f8d6be4ecc1a05ceeabf2dc2ffbcdf3781a79b8fba69cfd9f"
+    },
+    {
+      "path": "s4_artifacts/Plugin_Zoom.zip",
+      "sha256": "7c6bf5d4a605d10f8c212998c51fbbfd75e4c299bfec5a266a4b98f7de158933",
+      "size": 115205,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/7c6bf5d4a605d10f8c212998c51fbbfd75e4c299bfec5a266a4b98f7de158933"
+    },
+    {
+      "path": "s4_artifacts/Textures_NewWorld.zip",
+      "sha256": "2a45e095a64e32c794a25da0f8f75314a5baa83afa34200e65db435c31091849",
+      "size": 17144954,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/2a45e095a64e32c794a25da0f8f75314a5baa83afa34200e65db435c31091849"
+    },
+    {
+      "path": "s4_artifacts/Textures_OldWorld.zip",
+      "sha256": "2fe6c88d22e2a8819afe73ea347f5350613ffba6119babdbb3f2d0588751d997",
+      "size": 14954065,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/2fe6c88d22e2a8819afe73ea347f5350613ffba6119babdbb3f2d0588751d997"
+    },
+    {
+      "path": "s4_hotkeys/Newtonsoft.Json.dll",
+      "sha256": "22c649f75fce5be7c7ccda8880473b634ef69ecf33f5d1ab8ad892caf47d5a07",
+      "size": 712464,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/22c649f75fce5be7c7ccda8880473b634ef69ecf33f5d1ab8ad892caf47d5a07"
+    },
+    {
+      "path": "s4_hotkeys/Settlers4HotKeysConfig.deps.json",
+      "sha256": "a7f128ab7abb7a15eca948c21f7bc7acbc20b4d9916659e3ac893ba8de6be1f2",
+      "size": 1123,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/a7f128ab7abb7a15eca948c21f7bc7acbc20b4d9916659e3ac893ba8de6be1f2"
+    },
+    {
+      "path": "s4_hotkeys/Settlers4HotKeysConfig.dll",
+      "sha256": "be3ae0d0fd093d19dcc0612b1b29ff3e7cc487f0774db61c7c49e0d9a356c71f",
+      "size": 343040,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/be3ae0d0fd093d19dcc0612b1b29ff3e7cc487f0774db61c7c49e0d9a356c71f"
+    },
+    {
+      "path": "s4_hotkeys/Settlers4HotKeysConfig.exe",
+      "sha256": "1cced0709e3caeac07de4814223fd483c0a407af02dda9a852a8327cfac82c39",
+      "size": 121344,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/1cced0709e3caeac07de4814223fd483c0a407af02dda9a852a8327cfac82c39"
+    },
+    {
+      "path": "s4_hotkeys/Settlers4HotKeysConfig.pdb",
+      "sha256": "80f6b2922ee80df32d4488cb5c9e0f880aa5667fe6a23ca4252e3c612731301c",
+      "size": 42852,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/80f6b2922ee80df32d4488cb5c9e0f880aa5667fe6a23ca4252e3c612731301c"
+    },
+    {
+      "path": "s4_hotkeys/Settlers4HotKeysConfig.runtimeconfig.json",
+      "sha256": "89ad1ea5c9c20b6b266547ef27c0ae3840cab5642d3c2aedf06b7026245671dd",
+      "size": 515,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/89ad1ea5c9c20b6b266547ef27c0ae3840cab5642d3c2aedf06b7026245671dd"
+    },
+    {
+      "path": "settlers-united.dll",
+      "sha256": "7e853b0c76cc84ab6b828716cd4f408a50863a81b190e90e7798733c171ca125",
+      "size": 7212032,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/7e853b0c76cc84ab6b828716cd4f408a50863a81b190e90e7798733c171ca125"
+    }
+  ]
+}
