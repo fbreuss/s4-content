@@ -1,0 +1,157 @@
+{
+  "format": 1,
+  "version": 9,
+  "created": "2026-11-04T09:17:27.187Z",
+  "branch": "main",
+  "commit": "9ff371cf5f2c4979abf13231ea926e28dd7b3a7b",
+  "message": "update stable",
+  "contentHash": "b10168e314dc3a556b0f7697d3b7ba69b6c67b918b8b58131501799a3519368d",
+  "criticalHash": "d8566d5649ef03825c3ad9d37a3c59eca07fe6799688250bfeb5251128169857",
+  "preserve": [],
+  "notes": {
+    "default": "# Fixed\n- No FE but a warning instead if you join a game and do not have the correct map locally (see section Added for *Automatic Map and Script Exchange*).\n- Fixed a FE at the lobby screen when changing the balancing option.\n- Tutorial-events stayed active in lobby, leading to FEs when e.g. pressing space.\n- Better Chat Symbols: now working for initial messages as well.\n- **Ferry unloading**: checks properly for ground type, avoiding Entities being stuck on water.\n- Advanced Chat Commands are now properly sent and executed on every machine in parallel avoiding Desyncs (except for the explicit keyword 'local').\n- Fixed speed of entities on pathways, they were off by one.\n- Hotkeys keep working after changing player mid-game.\n- Rightclick now copies the proper chat message (it often took the wrong line).\n- SULib: SU.GameData.Set-Functions now clamp the parameter instead of modulo (e.g. 256 -> 255 instead of 0).\n\n\n# Added\n- Balancing-files are force-reloaded at every single map-start to prevent desyncs due to old settings (e.g. a player with who played UBO joins now UBO-Test).\n- Added CRC-checks inside the lobby and at game-start, checking all balancing relevant things (Maps, Files, Scripts, Settings) -> find mismatching settings before playing.\n- Invite-button: a menu shows up listing all your Ubisoft friends to directly invite them into your game.\n- Ferry instant unloader. Note that vehicles might still be in there, as they would usually be spawned at last (furthest away), which might not always be desired as they are kind of unprotected there - can be adjusted if wanted.\n- Saboteurs can attack Ports and Shipyards properly.\n- Spell 'Attack out of Nowhere' now prioritizes entities in the following order: (first) squadleader, swordman, racespecial, bowman, rest (last).\n\n- **Attack canceling fix**: damage is now always applied at the end of an animation, even when given a new movement command in the meantime.\n\n- **Workingarea for big temples** let priest go there automatically.\n\n- **Automatic Map and Script Exchange**: when you join a game, the map and script (internal and external ones!) are both checked and if not existent on your machine automatically downloaded directly from the host - no need to exchange any maps/scripts anymore!\n\n- **PioneerPath**: you can now let pioneers capture a path from A to B automatically. It's by design a bit wider than needed with some natural variations s.t. micromanaging is still quicker. You can start it **via GUI** or **Shift+rightclicking** the selected ones from their mean position the the mouse coordinate.\n\n- **Geologists variable precision**: you can define the precision (coarse, normal, fine) of geologists **via GUI** or by **Ctrl(coarse) / Shift(fine) + rightclicking**."
+  },
+  "files": [
+    {
+      "path": "s4_artifacts/BalanceConfigs.zip",
+      "sha256": "8c1f749c789abf3f9f71a09997f6bbfc0521cacb65318d11eb245e9f2d5df950",
+      "size": 1444852,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/8c1f749c789abf3f9f71a09997f6bbfc0521cacb65318d11eb245e9f2d5df950"
+    },
+    {
+      "path": "s4_artifacts/Edition_HE.zip",
+      "sha256": "38602656b2c2591ad53d5d66a72f9f198419d412150fbb94842dd284ab1e7a1f",
+      "size": 31314212,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/38602656b2c2591ad53d5d66a72f9f198419d412150fbb94842dd284ab1e7a1f"
+    },
+    {
+      "path": "s4_artifacts/Editor_Plus.zip",
+      "sha256": "ad0e7f92c04fb50292b150c5d0ae6e3e4dd6d3cf2ab7423349a0345dea7e6689",
+      "size": 181340,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ad0e7f92c04fb50292b150c5d0ae6e3e4dd6d3cf2ab7423349a0345dea7e6689"
+    },
+    {
+      "path": "s4_artifacts/Editor_withFix.zip",
+      "sha256": "ad5cac2f52f420f0db3855bd6495f7566d095b7f2f91f041a5b697e53d703e6c",
+      "size": 593639,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ad5cac2f52f420f0db3855bd6495f7566d095b7f2f91f041a5b697e53d703e6c"
+    },
+    {
+      "path": "s4_artifacts/Editor_withoutFix.zip",
+      "sha256": "83b60043f3fb28876f16356e830ab19959f21cc779fbe3ba812918f2deba07e3",
+      "size": 607809,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/83b60043f3fb28876f16356e830ab19959f21cc779fbe3ba812918f2deba07e3"
+    },
+    {
+      "path": "s4_artifacts/Maps_MissionOverhaul.zip",
+      "sha256": "54e2c260be1222cbd1f8c7b91801f75f6c55e7e00968d39e8c551e163284ce58",
+      "size": 1520144,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/54e2c260be1222cbd1f8c7b91801f75f6c55e7e00968d39e8c551e163284ce58"
+    },
+    {
+      "path": "s4_artifacts/Maps_Originals.zip",
+      "sha256": "493caa7639c7ae85a46286d3db8cc4abc4e1a769e3989e94bbfcd8b3827663b1",
+      "size": 1529179,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/493caa7639c7ae85a46286d3db8cc4abc4e1a769e3989e94bbfcd8b3827663b1"
+    },
+    {
+      "path": "s4_artifacts/Music_NoBing.zip",
+      "sha256": "0a72e00a3e1c58368b54d435f571ea97fee6135df9884cd5dcdf8397b07572dc",
+      "size": 9034378,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/0a72e00a3e1c58368b54d435f571ea97fee6135df9884cd5dcdf8397b07572dc"
+    },
+    {
+      "path": "s4_artifacts/Music_S3_false.zip",
+      "sha256": "9c21bb4a46703825f7df24855ef8d55f36f1f614f50b225e605c8c5279b40dc8",
+      "size": 1082,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/9c21bb4a46703825f7df24855ef8d55f36f1f614f50b225e605c8c5279b40dc8"
+    },
+    {
+      "path": "s4_artifacts/Music_S3_true.zip",
+      "sha256": "f970562749f01ed6f4a9a3043d9ecad1d04b6060997a3fb30806fd24e47cbbff",
+      "size": 1234,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/f970562749f01ed6f4a9a3043d9ecad1d04b6060997a3fb30806fd24e47cbbff"
+    },
+    {
+      "path": "s4_artifacts/Plugin_HDPatch_Remove.zip",
+      "sha256": "5c75c79f89591b95b9226c3785d4e251ed21172e10f637d211f5b595ad11a2e6",
+      "size": 187,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/5c75c79f89591b95b9226c3785d4e251ed21172e10f637d211f5b595ad11a2e6"
+    },
+    {
+      "path": "s4_artifacts/Plugin_SU.zip",
+      "sha256": "acae7342e3ae6c161d1d3ae70c5f3e6d5e9b1130068bdaf60a51d475603f8073",
+      "size": 1963145,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v9/acae7342e3ae6c161d1d3ae70c5f3e6d5e9b1130068bdaf60a51d475603f8073"
+    },
+    {
+      "path": "s4_artifacts/Plugin_Zoom.zip",
+      "sha256": "7c6bf5d4a605d10f8c212998c51fbbfd75e4c299bfec5a266a4b98f7de158933",
+      "size": 115205,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/7c6bf5d4a605d10f8c212998c51fbbfd75e4c299bfec5a266a4b98f7de158933"
+    },
+    {
+      "path": "s4_artifacts/Textures_NewWorld.zip",
+      "sha256": "2a45e095a64e32c794a25da0f8f75314a5baa83afa34200e65db435c31091849",
+      "size": 17144954,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/2a45e095a64e32c794a25da0f8f75314a5baa83afa34200e65db435c31091849"
+    },
+    {
+      "path": "s4_artifacts/Textures_OldWorld.zip",
+      "sha256": "2fe6c88d22e2a8819afe73ea347f5350613ffba6119babdbb3f2d0588751d997",
+      "size": 14954065,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/2fe6c88d22e2a8819afe73ea347f5350613ffba6119babdbb3f2d0588751d997"
+    },
+    {
+      "path": "s4_hotkeys/Newtonsoft.Json.dll",
+      "sha256": "22c649f75fce5be7c7ccda8880473b634ef69ecf33f5d1ab8ad892caf47d5a07",
+      "size": 712464,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/22c649f75fce5be7c7ccda8880473b634ef69ecf33f5d1ab8ad892caf47d5a07"
+    },
+    {
+      "path": "s4_hotkeys/Resources/HotKeysBind.txt",
+      "sha256": "d4f33111349c8ab83280abca9b9adea8b366c73f07dbe2e4d7066ffc5eac1850",
+      "size": 43951,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v9/d4f33111349c8ab83280abca9b9adea8b366c73f07dbe2e4d7066ffc5eac1850"
+    },
+    {
+      "path": "s4_hotkeys/Settlers4HotKeysConfig.deps.json",
+      "sha256": "a7f128ab7abb7a15eca948c21f7bc7acbc20b4d9916659e3ac893ba8de6be1f2",
+      "size": 1123,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/a7f128ab7abb7a15eca948c21f7bc7acbc20b4d9916659e3ac893ba8de6be1f2"
+    },
+    {
+      "path": "s4_hotkeys/Settlers4HotKeysConfig.dll",
+      "sha256": "5cab776bacad3f0adcd940149ebc522819e799ab19574df0561a75bb93809a82",
+      "size": 294912,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v9/5cab776bacad3f0adcd940149ebc522819e799ab19574df0561a75bb93809a82"
+    },
+    {
+      "path": "s4_hotkeys/Settlers4HotKeysConfig.exe",
+      "sha256": "5b1086b6e47e4df86d3719b61c6b9ad8c4fa10e0fcaf6c9926af533925c849a6",
+      "size": 121344,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v9/5b1086b6e47e4df86d3719b61c6b9ad8c4fa10e0fcaf6c9926af533925c849a6"
+    },
+    {
+      "path": "s4_hotkeys/Settlers4HotKeysConfig.pdb",
+      "sha256": "c12e034968ba3e84e5669892e09cf10368a8a17134089dd884f04c04d90cd01b",
+      "size": 27302,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v9/c12e034968ba3e84e5669892e09cf10368a8a17134089dd884f04c04d90cd01b"
+    },
+    {
+      "path": "s4_hotkeys/Settlers4HotKeysConfig.runtimeconfig.json",
+      "sha256": "89ad1ea5c9c20b6b266547ef27c0ae3840cab5642d3c2aedf06b7026245671dd",
+      "size": 515,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/89ad1ea5c9c20b6b266547ef27c0ae3840cab5642d3c2aedf06b7026245671dd"
+    },
+    {
+      "path": "settlers-united.dll",
+      "sha256": "7e853b0c76cc84ab6b828716cd4f408a50863a81b190e90e7798733c171ca125",
+      "size": 7212032,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/7e853b0c76cc84ab6b828716cd4f408a50863a81b190e90e7798733c171ca125"
+    }
+  ]
+}
