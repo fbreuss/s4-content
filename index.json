@@ -1,6 +1,6 @@
 {
-  "latestVersion": 11,
-  "seq": 14,
+  "latestVersion": 12,
+  "seq": 15,
   "objects": {
     "ba3e46fed9a49c18e634885c18388892f7645912e443231ff79e64c57ae4079a": {
       "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ba3e46fed9a49c18e634885c18388892f7645912e443231ff79e64c57ae4079a",
@@ -178,7 +178,8 @@
     "3ca863da88ba719d78685fbe69231df906d41296487f423298fcf5f680f49802": 8,
     "b10168e314dc3a556b0f7697d3b7ba69b6c67b918b8b58131501799a3519368d": 9,
     "f71f0b3b959818a056d13fdeda4d98e678b468e5371d10b0fb0126da05ca3f46": 10,
-    "a93ad6e91a0910a2418c12d5726fa77a8132b9e2f3f8dfce0095646bf8e26510": 11
+    "a93ad6e91a0910a2418c12d5726fa77a8132b9e2f3f8dfce0095646bf8e26510": 11,
+    "080c284886e62f9afd0e822d8ee028c53bfa7baee721b7936f7358a5b0739281": 12
   },
   "releaseHistory": {
     "main": [
@@ -233,9 +234,13 @@
       {
         "version": 8,
         "at": "2026-11-04T07:55:06.347Z"
+      },
+      {
+        "version": 12,
+        "at": "2026-11-16T18:27:35.423Z"
       }
     ]
   },
-  "changelogSeq": 18,
-  "changelogHash": "e872ecaab0a9d8520765923aee88fc368e5fe52dfb0ca88ebe9386f821a9ce75"
+  "changelogSeq": 19,
+  "changelogHash": "1596a8972d64a766a5cc2c402253798c8eb3702816b51f802eb71fb86c25e287"
 }

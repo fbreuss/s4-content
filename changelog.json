@@ -99,6 +99,12 @@
       "text": {
         "default": "# Fixed\n- Fixes a Hash-warning at game start."
       }
+    },
+    "12": {
+      "created": "2026-11-16T18:27:35.421Z",
+      "branch": "Preview",
+      "commit": "81ea4a9",
+      "message": "fix preview"
     }
   },
   "releases": {
@@ -124,8 +130,12 @@
       ]
     },
     "Preview": {
-      "current": 8,
+      "current": 12,
       "versions": [
+        {
+          "version": 12,
+          "at": "2026-11-16T18:27:35.423Z"
+        },
         {
           "version": 8,
           "at": "2026-11-04T07:55:06.347Z"
@@ -157,6 +167,6 @@
       ]
     }
   },
-  "seq": 18,
-  "updated": "2026-11-16T18:10:50.945Z"
+  "seq": 19,
+  "updated": "2026-11-16T18:27:35.431Z"
 }
