@@ -1,11 +1,11 @@
 {
   "format": 1,
-  "seq": 12,
+  "seq": 13,
   "releases": {
     "main": {
-      "version": 9,
-      "criticalHash": "d8566d5649ef03825c3ad9d37a3c59eca07fe6799688250bfeb5251128169857",
-      "releasedAt": "2026-11-04T09:17:27.190Z"
+      "version": 10,
+      "criticalHash": "3cdfa9a044a7d74fcb636ad3ce74d784697637b47932afedcd0d9a33323efe8e",
+      "releasedAt": "2026-11-16T17:43:37.204Z"
     },
     "Preview": {
       "version": 8,
@@ -14,5 +14,5 @@
     }
   },
   "mirrors": [],
-  "updated": "2026-11-04T09:17:27.190Z"
+  "updated": "2026-11-16T17:43:37.204Z"
 }

@@ -1,6 +1,6 @@
 {
-  "latestVersion": 9,
-  "seq": 12,
+  "latestVersion": 10,
+  "seq": 13,
   "objects": {
     "ba3e46fed9a49c18e634885c18388892f7645912e443231ff79e64c57ae4079a": {
       "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ba3e46fed9a49c18e634885c18388892f7645912e443231ff79e64c57ae4079a",
@@ -145,6 +145,18 @@
     "c12e034968ba3e84e5669892e09cf10368a8a17134089dd884f04c04d90cd01b": {
       "url": "https://github.com/fbreuss/s4-content/releases/download/v9/c12e034968ba3e84e5669892e09cf10368a8a17134089dd884f04c04d90cd01b",
       "size": 27302
+    },
+    "077d2ccffccc90d906763667cf1774f0f3e4702d55d11a39869f333300d00d4e": {
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v10/077d2ccffccc90d906763667cf1774f0f3e4702d55d11a39869f333300d00d4e",
+      "size": 1641984
+    },
+    "7f2c7a2726efc408941974d4c1d5d96ad19fcf48ff6204934da8a5d984063772": {
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v10/7f2c7a2726efc408941974d4c1d5d96ad19fcf48ff6204934da8a5d984063772",
+      "size": 1956769
+    },
+    "9ada71fa68523fbde9ac3368a9b9362132eca9da911262d877431a1b2f9aafc1": {
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v10/9ada71fa68523fbde9ac3368a9b9362132eca9da911262d877431a1b2f9aafc1",
+      "size": 4739072
     }
   },
   "contentVersions": {
@@ -156,7 +168,8 @@
     "7d892c53270aa83201a083a817d5414c1052b4d3de08d408abc766e62bf5d1e2": 6,
     "d781c9e0cb002345c1418ef18cc4ef3db6cc9dc27e5e4c87b9f3708c817c6f5d": 7,
     "3ca863da88ba719d78685fbe69231df906d41296487f423298fcf5f680f49802": 8,
-    "b10168e314dc3a556b0f7697d3b7ba69b6c67b918b8b58131501799a3519368d": 9
+    "b10168e314dc3a556b0f7697d3b7ba69b6c67b918b8b58131501799a3519368d": 9,
+    "f71f0b3b959818a056d13fdeda4d98e678b468e5371d10b0fb0126da05ca3f46": 10
   },
   "releaseHistory": {
     "main": [
@@ -167,6 +180,10 @@
       {
         "version": 9,
         "at": "2026-11-04T09:17:27.190Z"
+      },
+      {
+        "version": 10,
+        "at": "2026-11-16T17:43:37.204Z"
       }
     ],
     "preview": [
@@ -206,6 +223,6 @@
       }
     ]
   },
-  "changelogSeq": 16,
-  "changelogHash": "6e35946175da337295ffd109096cd4413e13c760a08753544647cf13475edf65"
+  "changelogSeq": 17,
+  "changelogHash": "42867e34dd4a68981b49751fa4eb05e63757240cd0e9c03b1f18c72e0dbcffb0"
 }
