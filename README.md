@@ -34,11 +34,32 @@ Published (signed with the same key): `changelog.json` (+ `.sig`) with all versi
 and `changelog.html` (tabs per release, search, language switch, `changelog.html#v<N>` links to a version,
 `?release=<name>` selects a tab). Every release entry in `releases.json` also has `releasedAt`.
 
-## Configuration (`packages.json`)
+## Configuration (`bin/packages.json`)
 
 - `critical`: files that must be identical on all machines (they make up the `criticalHash`, e.g. balancing and plugin)
 - `preserve`: paths the launcher never deletes or overwrites
 - `mirrors`: additional download sources (`<base>/<sha256>`)
+- `_readme`: explanation only, ignored by the tools
+
+**`critical` is the only place that defines the critical files.** The file lies in `bin/` on purpose, so it is published
+and installed into the launcher's `bin/` like every other content file. Three parts work with the same list:
+
+1. `tools/publish.mjs` builds the `criticalHash` of every version from it (stored in the manifest and in `releases.json`).
+2. The launcher writes that `criticalHash` to the registry as `ModHash` when it installs a version (nothing to change there).
+3. The SettlersUnited plugin (`S4ModVersion.cpp`) reads `packages.json` from the launcher's `bin/` at every game start,
+   hashes the listed files on disk the same way and compares the result with `ModHash`. Different = the warning
+   "Die Settlers-United-Dateien ... unterscheiden sich von der installierten Version".
+
+So adding or removing a critical file needs **no code change**, just a push. Every player gets the new list with that
+version. Requirements:
+
+- Never move `packages.json` out of `bin/` and never keep a second copy in the repository root:
+  `publish.mjs` stops with an error then.
+- The plugin in `Plugin_SU.zip` must be one that reads `bin/packages.json` (S4ModVersion.cpp, s4-helper branch `stable`
+  since 2026-11-16). An older plugin still uses its built-in list (`settlers-united.dll`, `BalanceConfigs.zip`, `Plugin_SU.zip`); with any other list
+  it shows the warning at every start.
+- A branch without `bin/packages.json` (e.g. an old `Preview`) keeps its own root `packages.json` and old `publish.mjs`
+  until it is merged with `main`; a plugin that finds no `bin/packages.json` skips the file check (no warning).
 
 ## Published data
 

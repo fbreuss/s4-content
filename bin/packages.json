@@ -1,0 +1,13 @@
+{
+  "_readme": "THE one definition of the critical files: the files every player needs byte-identical for multiplayer. tools/publish.mjs builds the criticalHash of every version from this list (the launcher writes it to the registry as ModHash), and because this file lies in bin/ the launcher installs it with the content, so the SettlersUnited plugin reads the same list at every start and checks the files on disk with the same hash (S4ModVersion.cpp). Changing the list needs no code change anywhere, just publish. See README.md, Configuration.",
+  "critical": [
+    "settlers-united.dll",
+    "s4.dll",
+    "s4u.exe",
+    "s4_artifacts/BalanceConfigs.zip",
+    "s4_artifacts/Edition_HE.zip",
+    "s4_artifacts/Plugin_SU.zip"
+  ],
+  "preserve": [],
+  "mirrors": []
+}

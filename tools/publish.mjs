@@ -22,6 +22,10 @@ const PROTECTED_RELEASE = 'main';
 
 const SRC_DIR = process.env.SRC_DIR || path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BIN_DIR = path.join(SRC_DIR, 'bin');
+// The configuration lies INSIDE bin/ on purpose: it is published and installed like every content file, so the
+// SettlersUnited plugin reads the same "critical" list from the launcher's bin/ (S4ModVersion.cpp) -> one definition of
+// the critical files for publish.mjs (criticalHash = the launcher's ModHash) and the plugin's file check.
+const CONFIG_FILE = path.join(BIN_DIR, 'packages.json');
 const CHANGELOG_DIR = process.env.CHANGELOG_DIR || path.join(SRC_DIR, 'changelog');
 const CHANGELOG_FORMAT = 1;
 // changelog/<version>.md = text for every language, <version>.de.md / <version>.en.md = per language
@@ -38,6 +42,21 @@ function env(name) {
 function readJson(file, fallback) {
   if (!fs.existsSync(file)) return fallback;
   return JSON.parse(fs.readFileSync(file, 'utf8'));
+}
+
+// bin/packages.json, required: without it every version would have an empty criticalHash and the plugin no list.
+function readConfig() {
+  const legacy = path.join(SRC_DIR, 'packages.json');
+  if (fs.existsSync(legacy)) {
+    throw new Error('packages.json belongs into bin/ (bin/packages.json), the plugin reads it from there: move it, do not keep two');
+  }
+  if (!fs.existsSync(CONFIG_FILE)) throw new Error('bin/packages.json is missing (defines the critical files)');
+  const config = readJson(CONFIG_FILE, {});
+  const critical = config.critical;
+  if (!Array.isArray(critical) || !critical.length || critical.some((p) => typeof p !== 'string' || !p)) {
+    throw new Error('bin/packages.json: "critical" must be a non-empty list of paths relative to bin/');
+  }
+  return config;
 }
 
 function writeJson(file, obj) {
@@ -494,7 +513,7 @@ async function publish() {
   const pagesDir = env('PAGES_DIR');
   const branch = env('BRANCH');
   const key = crypto.createPrivateKey(env('SIGNING_KEY'));
-  const config = readJson(path.join(SRC_DIR, 'packages.json'), {});
+  const config = readConfig();
   const preserve = config.preserve || [];
   const files = await collectFiles(config);
   const contentHash = contentHashOf(files, preserve);
@@ -587,7 +606,7 @@ async function changelog() {
 }
 
 async function check() {
-  const config = readJson(path.join(SRC_DIR, 'packages.json'), {});
+  const config = readConfig();
   const files = await collectFiles(config);
   for (const f of files) {
     console.log(`${f.critical ? '*' : ' '} ${f.sha256.slice(0, 12)}  ${String(f.size).padStart(10)}  ${f.path}`);
