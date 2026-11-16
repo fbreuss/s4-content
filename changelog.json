@@ -90,12 +90,25 @@
       "text": {
         "default": "# Fixed\n- Fixes an error with the editor, where you could not place buildings for other tribes than roman (specifically, everything after the fishers hut in the xml file).\n- Fixes an FE regarding explorer radius, happening mostly when settlers die at the dark tribes fortress."
       }
+    },
+    "11": {
+      "created": "2026-11-16T18:10:50.936Z",
+      "branch": "main",
+      "commit": "26c753a",
+      "message": "update stable",
+      "text": {
+        "default": "# Fixed\n- Fixes a Hash-warning at game start."
+      }
     }
   },
   "releases": {
     "main": {
-      "current": 10,
+      "current": 11,
       "versions": [
+        {
+          "version": 11,
+          "at": "2026-11-16T18:10:50.938Z"
+        },
         {
           "version": 10,
           "at": "2026-11-16T17:43:37.204Z"
@@ -144,6 +157,6 @@
       ]
     }
   },
-  "seq": 17,
-  "updated": "2026-11-16T17:43:37.209Z"
+  "seq": 18,
+  "updated": "2026-11-16T18:10:50.945Z"
 }
