@@ -353,7 +353,7 @@ function renderChangelogHtml(data) {
   .tag.on { color:#fff !important; }
   article.cur { background:color-mix(in srgb, var(--cur) 14%, transparent); border-left-color:var(--cur); border-radius:0 6px 6px 0; }
   .legend { color:var(--muted); font-size:13px; margin:-6px 0 10px; }
-  p { margin:6px 0; } ul { margin:6px 0; padding-left:22px; } code { background:color-mix(in srgb, var(--muted) 20%, transparent); padding:0 4px; border-radius:3px; }
+  p { margin:6px 0; } ul { margin:6px 0; padding-left:22px; } li > ul { margin:2px 0; } code { background:color-mix(in srgb, var(--muted) 20%, transparent); padding:0 4px; border-radius:3px; }
   .empty { color:var(--muted); padding:24px 0; }
 </style>
 </head>
@@ -395,15 +395,29 @@ function renderChangelogHtml(data) {
       parent.appendChild(el || document.createTextNode(part));
     });
   }
+  // Width of leading whitespace; a tab counts up to the next multiple of 4 (like in markdown).
+  function indentOf(ws) { var w = 0; for (var i = 0; i < ws.length; i++) w = ws[i] === '\\t' ? w + 4 - w % 4 : w + 1; return w; }
+  // "- " lists nest by indentation (tabs or spaces): a more indented item starts a sub list of the item before.
   function markdown(parent, md) {
-    var ul = null, p = null;
+    var lists = [], p = null; // open lists, innermost last: { indent, ul }
     md.split('\\n').forEach(function (line) {
-      var item = /^\\s*[-*]\\s+(.*)$/.exec(line);
+      var item = /^([ \\t]*)[-*]\\s+(.*)$/.exec(line);
       var head = /^#+\\s+(.*)$/.exec(line);
-      if (head) { ul = null; p = null; var h = document.createElement('h4'); inline(h, head[1]); parent.appendChild(h); return; }
-      if (item) { p = null; if (!ul) { ul = document.createElement('ul'); parent.appendChild(ul); } var li = document.createElement('li'); inline(li, item[1]); ul.appendChild(li); }
-      else if (!line.trim()) { ul = null; p = null; }
-      else { ul = null; if (!p) { p = document.createElement('p'); parent.appendChild(p); } else p.appendChild(document.createElement('br')); inline(p, line.replace(/^#+\\s*/, '')); }
+      if (head) { lists = []; p = null; var h = document.createElement('h4'); inline(h, head[1]); parent.appendChild(h); return; }
+      if (item) {
+        p = null;
+        var indent = indentOf(item[1]);
+        while (lists.length && lists[lists.length - 1].indent > indent) lists.pop();
+        var top = lists[lists.length - 1];
+        if (!top || indent > top.indent) {
+          var ul = document.createElement('ul');
+          (top ? top.ul.lastChild : parent).appendChild(ul);
+          top = { indent: indent, ul: ul }; lists.push(top);
+        }
+        var li = document.createElement('li'); inline(li, item[2]); top.ul.appendChild(li);
+      }
+      else if (!line.trim()) { p = null; }
+      else { lists = []; if (!p) { p = document.createElement('p'); parent.appendChild(p); } else p.appendChild(document.createElement('br')); inline(p, line.replace(/^#+\\s*/, '')); }
     });
   }
   function rows() {
