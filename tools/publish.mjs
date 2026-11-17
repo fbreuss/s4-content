@@ -22,6 +22,10 @@ const PROTECTED_RELEASE = 'main';
 
 const SRC_DIR = process.env.SRC_DIR || path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BIN_DIR = path.join(SRC_DIR, 'bin');
+// The configuration lies INSIDE bin/ on purpose: it is published and installed like every content file, so the
+// SettlersUnited plugin reads the same "critical" list from the launcher's bin/ (S4ModVersion.cpp) -> one definition of
+// the critical files for publish.mjs (criticalHash = the launcher's ModHash) and the plugin's file check.
+const CONFIG_FILE = path.join(BIN_DIR, 'packages.json');
 const CHANGELOG_DIR = process.env.CHANGELOG_DIR || path.join(SRC_DIR, 'changelog');
 const CHANGELOG_FORMAT = 1;
 // changelog/<version>.md = text for every language, <version>.de.md / <version>.en.md = per language
@@ -38,6 +42,21 @@ function env(name) {
 function readJson(file, fallback) {
   if (!fs.existsSync(file)) return fallback;
   return JSON.parse(fs.readFileSync(file, 'utf8'));
+}
+
+// bin/packages.json, required: without it every version would have an empty criticalHash and the plugin no list.
+function readConfig() {
+  const legacy = path.join(SRC_DIR, 'packages.json');
+  if (fs.existsSync(legacy)) {
+    throw new Error('packages.json belongs into bin/ (bin/packages.json), the plugin reads it from there: move it, do not keep two');
+  }
+  if (!fs.existsSync(CONFIG_FILE)) throw new Error('bin/packages.json is missing (defines the critical files)');
+  const config = readJson(CONFIG_FILE, {});
+  const critical = config.critical;
+  if (!Array.isArray(critical) || !critical.length || critical.some((p) => typeof p !== 'string' || !p)) {
+    throw new Error('bin/packages.json: "critical" must be a non-empty list of paths relative to bin/');
+  }
+  return config;
 }
 
 function writeJson(file, obj) {
@@ -353,7 +372,7 @@ function renderChangelogHtml(data) {
   .tag.on { color:#fff !important; }
   article.cur { background:color-mix(in srgb, var(--cur) 14%, transparent); border-left-color:var(--cur); border-radius:0 6px 6px 0; }
   .legend { color:var(--muted); font-size:13px; margin:-6px 0 10px; }
-  p { margin:6px 0; } ul { margin:6px 0; padding-left:22px; } code { background:color-mix(in srgb, var(--muted) 20%, transparent); padding:0 4px; border-radius:3px; }
+  p { margin:6px 0; } ul { margin:6px 0; padding-left:22px; } li > ul { margin:2px 0; } code { background:color-mix(in srgb, var(--muted) 20%, transparent); padding:0 4px; border-radius:3px; }
   .empty { color:var(--muted); padding:24px 0; }
 </style>
 </head>
@@ -395,15 +414,29 @@ function renderChangelogHtml(data) {
       parent.appendChild(el || document.createTextNode(part));
     });
   }
+  // Width of leading whitespace; a tab counts up to the next multiple of 4 (like in markdown).
+  function indentOf(ws) { var w = 0; for (var i = 0; i < ws.length; i++) w = ws[i] === '\\t' ? w + 4 - w % 4 : w + 1; return w; }
+  // "- " lists nest by indentation (tabs or spaces): a more indented item starts a sub list of the item before.
   function markdown(parent, md) {
-    var ul = null, p = null;
+    var lists = [], p = null; // open lists, innermost last: { indent, ul }
     md.split('\\n').forEach(function (line) {
-      var item = /^\\s*[-*]\\s+(.*)$/.exec(line);
+      var item = /^([ \\t]*)[-*]\\s+(.*)$/.exec(line);
       var head = /^#+\\s+(.*)$/.exec(line);
-      if (head) { ul = null; p = null; var h = document.createElement('h4'); inline(h, head[1]); parent.appendChild(h); return; }
-      if (item) { p = null; if (!ul) { ul = document.createElement('ul'); parent.appendChild(ul); } var li = document.createElement('li'); inline(li, item[1]); ul.appendChild(li); }
-      else if (!line.trim()) { ul = null; p = null; }
-      else { ul = null; if (!p) { p = document.createElement('p'); parent.appendChild(p); } else p.appendChild(document.createElement('br')); inline(p, line.replace(/^#+\\s*/, '')); }
+      if (head) { lists = []; p = null; var h = document.createElement('h4'); inline(h, head[1]); parent.appendChild(h); return; }
+      if (item) {
+        p = null;
+        var indent = indentOf(item[1]);
+        while (lists.length && lists[lists.length - 1].indent > indent) lists.pop();
+        var top = lists[lists.length - 1];
+        if (!top || indent > top.indent) {
+          var ul = document.createElement('ul');
+          (top ? top.ul.lastChild : parent).appendChild(ul);
+          top = { indent: indent, ul: ul }; lists.push(top);
+        }
+        var li = document.createElement('li'); inline(li, item[2]); top.ul.appendChild(li);
+      }
+      else if (!line.trim()) { p = null; }
+      else { lists = []; if (!p) { p = document.createElement('p'); parent.appendChild(p); } else p.appendChild(document.createElement('br')); inline(p, line.replace(/^#+\\s*/, '')); }
     });
   }
   function rows() {
@@ -480,7 +513,7 @@ async function publish() {
   const pagesDir = env('PAGES_DIR');
   const branch = env('BRANCH');
   const key = crypto.createPrivateKey(env('SIGNING_KEY'));
-  const config = readJson(path.join(SRC_DIR, 'packages.json'), {});
+  const config = readConfig();
   const preserve = config.preserve || [];
   const files = await collectFiles(config);
   const contentHash = contentHashOf(files, preserve);
@@ -573,7 +606,7 @@ async function changelog() {
 }
 
 async function check() {
-  const config = readJson(path.join(SRC_DIR, 'packages.json'), {});
+  const config = readConfig();
   const files = await collectFiles(config);
   for (const f of files) {
     console.log(`${f.critical ? '*' : ' '} ${f.sha256.slice(0, 12)}  ${String(f.size).padStart(10)}  ${f.path}`);
