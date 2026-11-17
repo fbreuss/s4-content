@@ -1,6 +1,6 @@
 {
-  "latestVersion": 12,
-  "seq": 15,
+  "latestVersion": 13,
+  "seq": 16,
   "objects": {
     "ba3e46fed9a49c18e634885c18388892f7645912e443231ff79e64c57ae4079a": {
       "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ba3e46fed9a49c18e634885c18388892f7645912e443231ff79e64c57ae4079a",
@@ -165,6 +165,26 @@
     "82898198c2f94ff4d4976781f349450d01ccf1b796dfa1136eede72762404c2d": {
       "url": "https://github.com/fbreuss/s4-content/releases/download/v11/82898198c2f94ff4d4976781f349450d01ccf1b796dfa1136eede72762404c2d",
       "size": 1960470
+    },
+    "7be286e8b945e3ae6dc043c093a26f6dc3b6402cc9c40e30fce5fc05451502c3": {
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v13/7be286e8b945e3ae6dc043c093a26f6dc3b6402cc9c40e30fce5fc05451502c3",
+      "size": 1018880
+    },
+    "81bfa34cde970f7b9562f1f82be95e6847caa0fab1841a0be4611c74245a972c": {
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v13/81bfa34cde970f7b9562f1f82be95e6847caa0fab1841a0be4611c74245a972c",
+      "size": 31315606
+    },
+    "bc7b9615e19e6ab89b72d9d46891f71ff212f860601881cf12a1e177609f74d5": {
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v13/bc7b9615e19e6ab89b72d9d46891f71ff212f860601881cf12a1e177609f74d5",
+      "size": 2770198
+    },
+    "aef5ae9ceab63b8adfe25496f9b668cb53fd9ec3102acc99716466f3a21b70ce": {
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v13/aef5ae9ceab63b8adfe25496f9b668cb53fd9ec3102acc99716466f3a21b70ce",
+      "size": 252928
+    },
+    "0ba68600bf9ed8199c462d2fe3f9db1415322219b2d622aa332ad2a59027e9b0": {
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v13/0ba68600bf9ed8199c462d2fe3f9db1415322219b2d622aa332ad2a59027e9b0",
+      "size": 7225856
     }
   },
   "contentVersions": {
@@ -179,7 +199,8 @@
     "b10168e314dc3a556b0f7697d3b7ba69b6c67b918b8b58131501799a3519368d": 9,
     "f71f0b3b959818a056d13fdeda4d98e678b468e5371d10b0fb0126da05ca3f46": 10,
     "a93ad6e91a0910a2418c12d5726fa77a8132b9e2f3f8dfce0095646bf8e26510": 11,
-    "080c284886e62f9afd0e822d8ee028c53bfa7baee721b7936f7358a5b0739281": 12
+    "080c284886e62f9afd0e822d8ee028c53bfa7baee721b7936f7358a5b0739281": 12,
+    "23dadbcf2007b59b6a49a4a9ddb729d532c24fc9e59f669886dc49aeabc49230": 13
   },
   "releaseHistory": {
     "main": [
@@ -238,9 +259,13 @@
       {
         "version": 12,
         "at": "2026-11-16T18:27:35.423Z"
+      },
+      {
+        "version": 13,
+        "at": "2026-11-17T11:21:45.269Z"
       }
     ]
   },
-  "changelogSeq": 19,
-  "changelogHash": "1596a8972d64a766a5cc2c402253798c8eb3702816b51f802eb71fb86c25e287"
+  "changelogSeq": 20,
+  "changelogHash": "a7171505e734b4b3bcb31f1156068dc4ed854a672101f0b47b980e3bd5171013"
 }

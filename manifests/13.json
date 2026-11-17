@@ -1,0 +1,172 @@
+{
+  "format": 1,
+  "version": 13,
+  "created": "2026-11-17T11:21:45.268Z",
+  "branch": "Preview",
+  "commit": "e42532edf661d88f17cd6708a101f4b33506b224",
+  "message": "update preview",
+  "contentHash": "23dadbcf2007b59b6a49a4a9ddb729d532c24fc9e59f669886dc49aeabc49230",
+  "criticalHash": "50e0a2760dddc5a5a51d844fd79a6b27b61c3628f1570778ee8a1c0d163c7f01",
+  "preserve": [],
+  "notes": {
+    "default": "# Fixed\n- Fixes an error with the editor, where you could not place buildings for other tribes than roman (specifically, everything after the fishers hut in the xml file).\n- Fixes an FE regarding explorer radius, happening mostly when settlers die at the dark tribes fortress.\n- Fixes a bug, where workers of **small viking temples** would not start to work at all.\n- Fixes a few values in the statistics.\n- The pause cursor comes back again after moving the screen around.\n- Makes the lobby more responsive.\n- Invite overlay shows and let you invite 'offline' players too, as the Ubisoft backend does not always show the correct state.\n- Fixes a zip-corruption at creation of log files.\n- Fixes a bug where **construction sites lost their priority state** when un-/paused.\n- Fixes a Desync caused by good distribution.\n- Fixes lobbynames (no '(Troja) (Troja)' anymore, proper text-length handling) that caused issues when trying to join lobbies.\n- Fixes borderscroll issues due to the Debug Overlay.\n- Fixes the script settings button to endlessly wandering to the right on smaller screens.\n\n\n# Added\n- **Construction sites**\n\t- They now have good priority over all other requestors, including gold and barracks. Sites with priority get all 3 goods first.\n\t- They now **request resources every single tick** instead of every 15th.\n- **Thieves GUI and modes**:\n\t- In the new GUI you can set a thief to always hold the stolen goods by default and let them drop the goods instantly.\n\t- At a distance < 4 they automatically keep stolen goods in their hands.\n- **Marketplaces**:\n\t- They have now **priority over production buildings**, **except** if set to **infinity-mode**.\n\t- They have a **request donkeys back** button for quicker transport.\n\t- **Reserved number of piles** now **depend** on the total **amount of different goods you've set**. E.g. if you only set **one good** to be transported, **all 8** instead of 3 **piles request it simultaneously**, improving throughput a lot - especially in combination with auto-returning donkeys. If you send 4 goods, each one gets 2 piles and so on.\n- Piles: you can now steal from piles even **while the working animation is played**. The goods that are going to be consumed by the worker remains reserved though. This also fixes a related bug for piles of crushed buildings.\n- **Fog of war updates way quicker** (12 instead of 40 ticks).\n- **Leveling bug fixed**: fixes a bug s.t. buildings will now always give a perfect plane area where it can be built again without the need of levelers (who until now were requested but then didn't work there at all).\n- Priests now have waypoints just like soldiers already had.\n- Advanced GUI interaction: ctrl+c/v to copy/paste the random map key.\n- Modding:\n\t- *minRange*, *range*, *searchRange* for every single unit in the XML files.\n\t- multiple piles of the same good per building supported now (e.g. 2 gold pile at barracks). Not used right now though.\n\n\n# Changed\n- **PT-Script**: instead of killing, the new script **now blocks all entities instead**. Specified entities (e.g. geologists, pioneers, soldiers, vehicles, etc.) will automatically stop walking/working and even do not attack over the axis anymore. A few fixes regarding towering were also implemented. **This is still WIP, let me know of any problems**.\n- Pings are now always on top of everything (FOW, Buildings, Settlers, etc).\n- The new hunter-message now behaves like the other messages as well (one message per building, won't spam anymore).\n- **Toolmaker hut**:\n\t- You can now order a specific amount of tools **in addition to infinity**, giving you the option to **prioritize a few tools over others**.\n\t- You can now **adjust the amount** of selected tools in the **priority-list** too (and remove a specific index completely).\n- Statistics are now saved in the save-file, allowing you to see all of it even after reload.\n- Instant building points: improved performance (spikes a lot) by distributing the load over multiple frames and dynamic refresh on map changes like territory, resource drops, etc.\n- Range visualization: all range warriors now.\n- Pause in multiplayer games: you can now click on the minimap too."
+  },
+  "files": [
+    {
+      "path": "packages.json",
+      "sha256": "7078cff590e4800f7f5e751d575fa22c10acf352dff73fa6e2ab4b74683be092",
+      "size": 784,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v11/7078cff590e4800f7f5e751d575fa22c10acf352dff73fa6e2ab4b74683be092"
+    },
+    {
+      "path": "s4.dll",
+      "sha256": "7be286e8b945e3ae6dc043c093a26f6dc3b6402cc9c40e30fce5fc05451502c3",
+      "size": 1018880,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v13/7be286e8b945e3ae6dc043c093a26f6dc3b6402cc9c40e30fce5fc05451502c3"
+    },
+    {
+      "path": "s4_artifacts/BalanceConfigs.zip",
+      "sha256": "8c1f749c789abf3f9f71a09997f6bbfc0521cacb65318d11eb245e9f2d5df950",
+      "size": 1444852,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/8c1f749c789abf3f9f71a09997f6bbfc0521cacb65318d11eb245e9f2d5df950"
+    },
+    {
+      "path": "s4_artifacts/Edition_HE.zip",
+      "sha256": "81bfa34cde970f7b9562f1f82be95e6847caa0fab1841a0be4611c74245a972c",
+      "size": 31315606,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v13/81bfa34cde970f7b9562f1f82be95e6847caa0fab1841a0be4611c74245a972c"
+    },
+    {
+      "path": "s4_artifacts/Editor_Plus.zip",
+      "sha256": "ad0e7f92c04fb50292b150c5d0ae6e3e4dd6d3cf2ab7423349a0345dea7e6689",
+      "size": 181340,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ad0e7f92c04fb50292b150c5d0ae6e3e4dd6d3cf2ab7423349a0345dea7e6689"
+    },
+    {
+      "path": "s4_artifacts/Editor_withFix.zip",
+      "sha256": "ad5cac2f52f420f0db3855bd6495f7566d095b7f2f91f041a5b697e53d703e6c",
+      "size": 593639,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/ad5cac2f52f420f0db3855bd6495f7566d095b7f2f91f041a5b697e53d703e6c"
+    },
+    {
+      "path": "s4_artifacts/Editor_withoutFix.zip",
+      "sha256": "83b60043f3fb28876f16356e830ab19959f21cc779fbe3ba812918f2deba07e3",
+      "size": 607809,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/83b60043f3fb28876f16356e830ab19959f21cc779fbe3ba812918f2deba07e3"
+    },
+    {
+      "path": "s4_artifacts/Maps_MissionOverhaul.zip",
+      "sha256": "54e2c260be1222cbd1f8c7b91801f75f6c55e7e00968d39e8c551e163284ce58",
+      "size": 1520144,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/54e2c260be1222cbd1f8c7b91801f75f6c55e7e00968d39e8c551e163284ce58"
+    },
+    {
+      "path": "s4_artifacts/Maps_Originals.zip",
+      "sha256": "493caa7639c7ae85a46286d3db8cc4abc4e1a769e3989e94bbfcd8b3827663b1",
+      "size": 1529179,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/493caa7639c7ae85a46286d3db8cc4abc4e1a769e3989e94bbfcd8b3827663b1"
+    },
+    {
+      "path": "s4_artifacts/Music_NoBing.zip",
+      "sha256": "0a72e00a3e1c58368b54d435f571ea97fee6135df9884cd5dcdf8397b07572dc",
+      "size": 9034378,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/0a72e00a3e1c58368b54d435f571ea97fee6135df9884cd5dcdf8397b07572dc"
+    },
+    {
+      "path": "s4_artifacts/Music_S3_false.zip",
+      "sha256": "9c21bb4a46703825f7df24855ef8d55f36f1f614f50b225e605c8c5279b40dc8",
+      "size": 1082,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/9c21bb4a46703825f7df24855ef8d55f36f1f614f50b225e605c8c5279b40dc8"
+    },
+    {
+      "path": "s4_artifacts/Music_S3_true.zip",
+      "sha256": "f970562749f01ed6f4a9a3043d9ecad1d04b6060997a3fb30806fd24e47cbbff",
+      "size": 1234,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/f970562749f01ed6f4a9a3043d9ecad1d04b6060997a3fb30806fd24e47cbbff"
+    },
+    {
+      "path": "s4_artifacts/Plugin_HDPatch_Remove.zip",
+      "sha256": "5c75c79f89591b95b9226c3785d4e251ed21172e10f637d211f5b595ad11a2e6",
+      "size": 187,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/5c75c79f89591b95b9226c3785d4e251ed21172e10f637d211f5b595ad11a2e6"
+    },
+    {
+      "path": "s4_artifacts/Plugin_SU.zip",
+      "sha256": "bc7b9615e19e6ab89b72d9d46891f71ff212f860601881cf12a1e177609f74d5",
+      "size": 2770198,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v13/bc7b9615e19e6ab89b72d9d46891f71ff212f860601881cf12a1e177609f74d5"
+    },
+    {
+      "path": "s4_artifacts/Plugin_Zoom.zip",
+      "sha256": "7c6bf5d4a605d10f8c212998c51fbbfd75e4c299bfec5a266a4b98f7de158933",
+      "size": 115205,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/7c6bf5d4a605d10f8c212998c51fbbfd75e4c299bfec5a266a4b98f7de158933"
+    },
+    {
+      "path": "s4_artifacts/Textures_NewWorld.zip",
+      "sha256": "2a45e095a64e32c794a25da0f8f75314a5baa83afa34200e65db435c31091849",
+      "size": 17144954,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/2a45e095a64e32c794a25da0f8f75314a5baa83afa34200e65db435c31091849"
+    },
+    {
+      "path": "s4_artifacts/Textures_OldWorld.zip",
+      "sha256": "2fe6c88d22e2a8819afe73ea347f5350613ffba6119babdbb3f2d0588751d997",
+      "size": 14954065,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v1/2fe6c88d22e2a8819afe73ea347f5350613ffba6119babdbb3f2d0588751d997"
+    },
+    {
+      "path": "s4_hotkeys/Newtonsoft.Json.dll",
+      "sha256": "22c649f75fce5be7c7ccda8880473b634ef69ecf33f5d1ab8ad892caf47d5a07",
+      "size": 712464,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/22c649f75fce5be7c7ccda8880473b634ef69ecf33f5d1ab8ad892caf47d5a07"
+    },
+    {
+      "path": "s4_hotkeys/Settlers4HotKeysConfig.deps.json",
+      "sha256": "a7f128ab7abb7a15eca948c21f7bc7acbc20b4d9916659e3ac893ba8de6be1f2",
+      "size": 1123,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/a7f128ab7abb7a15eca948c21f7bc7acbc20b4d9916659e3ac893ba8de6be1f2"
+    },
+    {
+      "path": "s4_hotkeys/Settlers4HotKeysConfig.dll",
+      "sha256": "be3ae0d0fd093d19dcc0612b1b29ff3e7cc487f0774db61c7c49e0d9a356c71f",
+      "size": 343040,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/be3ae0d0fd093d19dcc0612b1b29ff3e7cc487f0774db61c7c49e0d9a356c71f"
+    },
+    {
+      "path": "s4_hotkeys/Settlers4HotKeysConfig.exe",
+      "sha256": "1cced0709e3caeac07de4814223fd483c0a407af02dda9a852a8327cfac82c39",
+      "size": 121344,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/1cced0709e3caeac07de4814223fd483c0a407af02dda9a852a8327cfac82c39"
+    },
+    {
+      "path": "s4_hotkeys/Settlers4HotKeysConfig.pdb",
+      "sha256": "80f6b2922ee80df32d4488cb5c9e0f880aa5667fe6a23ca4252e3c612731301c",
+      "size": 42852,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/80f6b2922ee80df32d4488cb5c9e0f880aa5667fe6a23ca4252e3c612731301c"
+    },
+    {
+      "path": "s4_hotkeys/Settlers4HotKeysConfig.runtimeconfig.json",
+      "sha256": "89ad1ea5c9c20b6b266547ef27c0ae3840cab5642d3c2aedf06b7026245671dd",
+      "size": 515,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v8/89ad1ea5c9c20b6b266547ef27c0ae3840cab5642d3c2aedf06b7026245671dd"
+    },
+    {
+      "path": "s4u.exe",
+      "sha256": "aef5ae9ceab63b8adfe25496f9b668cb53fd9ec3102acc99716466f3a21b70ce",
+      "size": 252928,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v13/aef5ae9ceab63b8adfe25496f9b668cb53fd9ec3102acc99716466f3a21b70ce"
+    },
+    {
+      "path": "settlers-united.dll",
+      "sha256": "0ba68600bf9ed8199c462d2fe3f9db1415322219b2d622aa332ad2a59027e9b0",
+      "size": 7225856,
+      "critical": true,
+      "url": "https://github.com/fbreuss/s4-content/releases/download/v13/0ba68600bf9ed8199c462d2fe3f9db1415322219b2d622aa332ad2a59027e9b0"
+    }
+  ]
+}

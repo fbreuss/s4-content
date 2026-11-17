@@ -105,6 +105,15 @@
       "branch": "Preview",
       "commit": "81ea4a9",
       "message": "fix preview"
+    },
+    "13": {
+      "created": "2026-11-17T11:21:45.268Z",
+      "branch": "Preview",
+      "commit": "e42532e",
+      "message": "update preview",
+      "text": {
+        "default": "# Fixed\n- Fixes an error with the editor, where you could not place buildings for other tribes than roman (specifically, everything after the fishers hut in the xml file).\n- Fixes an FE regarding explorer radius, happening mostly when settlers die at the dark tribes fortress.\n- Fixes a bug, where workers of **small viking temples** would not start to work at all.\n- Fixes a few values in the statistics.\n- The pause cursor comes back again after moving the screen around.\n- Makes the lobby more responsive.\n- Invite overlay shows and let you invite 'offline' players too, as the Ubisoft backend does not always show the correct state.\n- Fixes a zip-corruption at creation of log files.\n- Fixes a bug where **construction sites lost their priority state** when un-/paused.\n- Fixes a Desync caused by good distribution.\n- Fixes lobbynames (no '(Troja) (Troja)' anymore, proper text-length handling) that caused issues when trying to join lobbies.\n- Fixes borderscroll issues due to the Debug Overlay.\n- Fixes the script settings button to endlessly wandering to the right on smaller screens.\n\n\n# Added\n- **Construction sites**\n\t- They now have good priority over all other requestors, including gold and barracks. Sites with priority get all 3 goods first.\n\t- They now **request resources every single tick** instead of every 15th.\n- **Thieves GUI and modes**:\n\t- In the new GUI you can set a thief to always hold the stolen goods by default and let them drop the goods instantly.\n\t- At a distance < 4 they automatically keep stolen goods in their hands.\n- **Marketplaces**:\n\t- They have now **priority over production buildings**, **except** if set to **infinity-mode**.\n\t- They have a **request donkeys back** button for quicker transport.\n\t- **Reserved number of piles** now **depend** on the total **amount of different goods you've set**. E.g. if you only set **one good** to be transported, **all 8** instead of 3 **piles request it simultaneously**, improving throughput a lot - especially in combination with auto-returning donkeys. If you send 4 goods, each one gets 2 piles and so on.\n- Piles: you can now steal from piles even **while the working animation is played**. The goods that are going to be consumed by the worker remains reserved though. This also fixes a related bug for piles of crushed buildings.\n- **Fog of war updates way quicker** (12 instead of 40 ticks).\n- **Leveling bug fixed**: fixes a bug s.t. buildings will now always give a perfect plane area where it can be built again without the need of levelers (who until now were requested but then didn't work there at all).\n- Priests now have waypoints just like soldiers already had.\n- Advanced GUI interaction: ctrl+c/v to copy/paste the random map key.\n- Modding:\n\t- *minRange*, *range*, *searchRange* for every single unit in the XML files.\n\t- multiple piles of the same good per building supported now (e.g. 2 gold pile at barracks). Not used right now though.\n\n\n# Changed\n- **PT-Script**: instead of killing, the new script **now blocks all entities instead**. Specified entities (e.g. geologists, pioneers, soldiers, vehicles, etc.) will automatically stop walking/working and even do not attack over the axis anymore. A few fixes regarding towering were also implemented. **This is still WIP, let me know of any problems**.\n- Pings are now always on top of everything (FOW, Buildings, Settlers, etc).\n- The new hunter-message now behaves like the other messages as well (one message per building, won't spam anymore).\n- **Toolmaker hut**:\n\t- You can now order a specific amount of tools **in addition to infinity**, giving you the option to **prioritize a few tools over others**.\n\t- You can now **adjust the amount** of selected tools in the **priority-list** too (and remove a specific index completely).\n- Statistics are now saved in the save-file, allowing you to see all of it even after reload.\n- Instant building points: improved performance (spikes a lot) by distributing the load over multiple frames and dynamic refresh on map changes like territory, resource drops, etc.\n- Range visualization: all range warriors now.\n- Pause in multiplayer games: you can now click on the minimap too."
+      }
     }
   },
   "releases": {
@@ -130,8 +139,12 @@
       ]
     },
     "Preview": {
-      "current": 12,
+      "current": 13,
       "versions": [
+        {
+          "version": 13,
+          "at": "2026-11-17T11:21:45.269Z"
+        },
         {
           "version": 12,
           "at": "2026-11-16T18:27:35.423Z"
@@ -167,6 +180,6 @@
       ]
     }
   },
-  "seq": 19,
-  "updated": "2026-11-16T18:27:35.431Z"
+  "seq": 20,
+  "updated": "2026-11-17T11:21:45.276Z"
 }
